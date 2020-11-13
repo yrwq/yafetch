@@ -6,7 +6,7 @@
 
 ### Installation
 
-#### Use it without intalling
+#### Use it without installing
 
 ``` sh
 curl -s https://raw.githubusercontent.com/yrwq/yafetch/main/yafetch | sh
@@ -30,4 +30,8 @@ chmod +x yafetch
 
 ``` sh
 cp yafetch ~/.local/bin/
+```
+
+``` sh
+yafetch
 ```
