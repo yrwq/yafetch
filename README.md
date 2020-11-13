@@ -23,3 +23,10 @@ cp yafetch ~/.local/bin/
 
 yafetch
 ```
+
+### Currently supported distrobutions
+
+- Arch
+- Artix
+- Debian
+- Void
