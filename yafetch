@@ -1,0 +1,72 @@
+#!/bin/bash
+
+cols(){
+	f=3 b=4
+	for j in f b; do
+  		for i in {0..7}; do
+    			printf -v $j$i %b "\e[${!j}${i}m"
+  		done
+	done
+	d=$'\e[1m'
+	t=$'\e[0m'
+	v=$'\e[7m'
+}
+
+getinfo(){
+
+	# Window manager
+	id_bloat=$(xprop -root _NET_SUPPORTING_WM_CHECK)
+	id=${id_bloat##* }
+	wm_bloat=$(xprop -id "$id" _NET_WM_NAME)
+	wm="$(echo $wm_bloat | cut -d'"' -f 2)"
+
+	# Kernel
+	kern="$(uname -sr | sed 's/-.*//')"
+
+	# Uptime
+	upt="$(uptime -p | sed 's/up //')"
+
+	# Shell
+	shell="$(basename ${SHELL})"
+}
+
+getos(){
+	os=$(
+   		. /etc/os-release
+   		echo "$ID"
+	)
+
+	case $os in
+		*void*)
+			pk=$(xbps-query -l | wc -l)
+		;;
+		*arch*)
+			pk=$(pacman -Q | wc -l)
+		;;
+		*artix*)
+			pk=$(pacman -Q | wc -l)
+		;;
+		*debian*)
+			pk=$(dpkg -l | wc -l)
+		;;
+	esac
+}
+
+
+main(){
+	getos
+	getinfo
+	cols
+	cat << EOF
+
+$f1██$d$t os	~	${magenta}$os
+$f2██$d$t wm	~	${magenta}$wm
+$f3██$d$t pkg	~	${magenta}$pk
+$f4██$d$t kern	~	${magenta}$kern
+$f5██$d$t upt	~	${magenta}$upt
+$f6██$d$t sh	~	${magenta}$shell
+
+EOF
+}
+
+main
