@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#
+# Yet another fetch ...
 
 initcolors() {
 	# colors
@@ -12,45 +12,41 @@ initcolors() {
 	purplef="${esc}[35m"
 	cyanf="${esc}[36m";
 	reset="${esc}[0m";
-
-	# circles
-	cred="${redf} ${reset}"
-	cgreen="${greenf} ${reset}"
-	cyellow="${yellowf} ${reset}"
-	cblue="${bluef} ${reset}"
-	cpurple="${purplef} ${reset}"
-	ccyan="${cyanf} ${reset}"
 }
 initcolors
 
-config=("date" "time" "kernel" "uptime")
+config=("date" "time" "kernel" "uptime" "weather")
 weather_city="Pécs"
 disk_path=("/dev/sda1")
 
-time_prefix=""
-kernel_prefix=""
-uptime_prefix=""
-date_prefix=""
-
+time_prefix="${redf} ${reset}"
+kernel_prefix="${greenf} ${reset}"
+uptime_prefix="${yellowf} ${reset}"
+date_prefix="${bluef} ${reset}"
+weather_prefix="${purplef}摒${reset}"
 
 for val in ${config[*]}; do
 	case $val in
 		time)
 			time="$(date +"%H:%M %p")"
-			argconf+=$cred' '$time_prefix' '$time'\n'
+			argconf+=$time_prefix' '$time'\n'
 			;;
 		date)
 			date="$(date +"%a %F")"
-			argconf+=$cblue' '$date_prefix' '$date'\n'
+			argconf+=$date_prefix' '$date'\n'
 			;;
 		kernel)
 			kern="$(uname -sr | sed 's/-.*//')"
-			argconf+=$cyellow' '$kernel_prefix' '$kern'\n'
+			argconf+=$kernel_prefix' '$kern'\n'
 			;;
 		uptime)
 			upt="$(uptime -p | sed 's/up //')"
-			argconf+=$cgreen' '$uptime_prefix' '$upt'\n'
+			argconf+=$uptime_prefix' '$upt'\n'
 			;;
+		weather)
+			weather="$(curl -s http://wttr.in/$weather_city?format=3)"
+			argconf+=$weather_prefix' '$weather'\n'
+		;;
 	esac
 done
 
