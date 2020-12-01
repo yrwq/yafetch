@@ -17,16 +17,7 @@ curl -s https://raw.githubusercontent.com/yrwq/yafetch/main/yafetch | sh
 ``` sh
 git clone https://github.com/yrwq/yafetch && cd yafetch
 
-chmod +x yafetch
-
-cp yafetch ~/.local/bin/
-
-yafetch
+make
 ```
 
-### Currently supported distrobutions
-
-- Arch
-- Artix
-- Debian
-- Void
+Running `make` will copy yafetch in to ~/.local/bin.

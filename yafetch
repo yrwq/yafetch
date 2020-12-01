@@ -15,16 +15,18 @@ initcolors() {
 }
 initcolors
 
-config=("date" "time" "kernel" "uptime" "weather" "disk")
+config=("os" "date" "time" "kernel" "pkg" "uptime" "weather" "disk")
 weather_city="Pécs"
 disk_path=("/dev/sda1")
 
+os_prefix="${redf} ${reset}"
 time_prefix="${redf} ${reset}"
 kernel_prefix="${greenf} ${reset}"
 uptime_prefix="${yellowf} ${reset}"
 date_prefix="${bluef} ${reset}"
 weather_prefix="${purplef}摒${reset}"
 disk_prefix="${cyanf} ${reset}"
+pkg_prefix="${yellowfg} ${reset}"
 
 for val in ${config[*]}; do
 	case $val in
@@ -52,6 +54,33 @@ for val in ${config[*]}; do
 			disk_total="$(df -h | grep ${disk_path} | awk '{print $2}')"
 			disk_used="$(df -h | grep ${disk_path} | awk '{print $3}')"
 			argconf+=$disk_prefix' '$disk_used'/'$disk_total'\n'
+		;;
+		os)
+			case "$OSTYPE" in
+  				solaris*) distro="solaris" ;;
+  				darwin*)  distro="osx" ;;
+  				linux*)   . /etc/os-release && distro=$ID ;;
+  				bsd*)     distro="bsd" ;;
+  				msys*)    distro="windows" ;;
+  				*)        distro="unknown" ;;
+			esac
+			argconf+=$os_prefix' '$distro'\n'
+		;;
+		pkg)
+            if command -v pacman &> /dev/null
+            then
+                pkg="$(pacman -Qq | wc -l)"
+            elif command -v dpkg &> /dev/null
+            then
+                pkg="$(dpkg --list | wc -l)"
+            elif command -v yum &> /dev/null
+            then
+                pkg="$(yum list installed | wc -l)"
+            elif command -v apt &> /dev/null
+            then
+                pkg="$(apt list --installed | wc -l)"
+            fi
+			argconf+=$pkg_prefix' '$pkg'\n'
 		;;
 	esac
 done
