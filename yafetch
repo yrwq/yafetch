@@ -15,7 +15,7 @@ initcolors() {
 }
 initcolors
 
-config=("date" "time" "kernel" "uptime" "weather")
+config=("date" "time" "kernel" "uptime" "weather" "disk")
 weather_city="Pécs"
 disk_path=("/dev/sda1")
 
@@ -24,6 +24,7 @@ kernel_prefix="${greenf} ${reset}"
 uptime_prefix="${yellowf} ${reset}"
 date_prefix="${bluef} ${reset}"
 weather_prefix="${purplef}摒${reset}"
+disk_prefix="${cyanf} ${reset}"
 
 for val in ${config[*]}; do
 	case $val in
@@ -44,8 +45,13 @@ for val in ${config[*]}; do
 			argconf+=$uptime_prefix' '$upt'\n'
 			;;
 		weather)
-			weather="$(curl -s http://wttr.in/$weather_city?format=3)"
+			weather="$(curl -s http://wttr.in/$weather_city?format=3 | awk '{print $3}' )"
 			argconf+=$weather_prefix' '$weather'\n'
+		;;
+		disk)
+			disk_total="$(df -h | grep ${disk_path} | awk '{print $2}')"
+			disk_used="$(df -h | grep ${disk_path} | awk '{print $3}')"
+			argconf+=$disk_prefix' '$disk_used'/'$disk_total'\n'
 		;;
 	esac
 done

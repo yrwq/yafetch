@@ -1,7 +1,7 @@
 ## Yet another fetch ...
 
 <p align="center">
-<img src=".assets/preview.png">
+<img src="https://0x0.st/i7Se.png">
 </p>
 
 ### Installation
