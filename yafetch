@@ -15,7 +15,7 @@ initcolors() {
 }
 initcolors
 
-config=("os" "date" "time" "kernel" "pkg" "uptime" "weather" "disk")
+config=("os" "date" "time" "kernel" "pkg" "uptime" "weather" "disk" "mem")
 weather_city="Pécs"
 disk_path=("/dev/sda1")
 
@@ -27,9 +27,15 @@ date_prefix="${bluef} ${reset}"
 weather_prefix="${purplef}摒${reset}"
 disk_prefix="${cyanf} ${reset}"
 pkg_prefix="${yellowf} ${reset}"
+mem_prefix="${purplef} ${reset}"
 
 for val in ${config[*]}; do
 	case $val in
+		mem)
+			mem_total="$(free -m | grep 'Mem:' | awk '{print $2}' )"
+			mem_used="$(free -m | grep 'Mem:' | awk '{print $3}' )"
+			argconf+=$mem_prefix' '$mem_used'/'$mem_total'M\n'
+			;;
 		time)
 			time="$(date +"%H:%M %p")"
 			argconf+=$time_prefix' '$time'\n'
@@ -59,7 +65,7 @@ for val in ${config[*]}; do
 			case "$OSTYPE" in
   				solaris*) distro="solaris" ;;
   				darwin*)  distro="osx" ;;
-  				linux*)   . /etc/os-release && distro=$ID ;;
+  				linux*)   . /etc/os-release && distro=$PRETTY_NAME ;;
   				bsd*)     distro="bsd" ;;
   				msys*)    distro="windows" ;;
   				*)        distro="unknown" ;;
