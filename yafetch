@@ -26,7 +26,7 @@ uptime_prefix="${yellowf} ${reset}"
 date_prefix="${bluef} ${reset}"
 weather_prefix="${purplef}摒${reset}"
 disk_prefix="${cyanf} ${reset}"
-pkg_prefix="${yellowfg} ${reset}"
+pkg_prefix="${yellowf} ${reset}"
 
 for val in ${config[*]}; do
 	case $val in
