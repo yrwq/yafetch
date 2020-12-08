@@ -2,7 +2,7 @@
 #
 # Yet another fetch ...
 
-initcolors() {
+colrs() {
 	# colors
 	esc=""
 	redf="${esc}[31m";
@@ -13,9 +13,11 @@ initcolors() {
 	cyanf="${esc}[36m";
 	reset="${esc}[0m";
 }
-initcolors
+colrs
 
-config=("os" "date" "time" "kernel" "pkg" "uptime" "weather" "disk" "mem")
+# os, date, time, kernel, pkg, uptime, weather, disk, mem, wm
+config=("os" "date" "time" "kernel" "pkg" "uptime" "weather" "disk" "mem" "wm")
+
 weather_city="Pécs"
 disk_path=("/dev/sda1")
 
@@ -28,6 +30,7 @@ weather_prefix="${purplef}摒${reset}"
 disk_prefix="${cyanf} ${reset}"
 pkg_prefix="${yellowf} ${reset}"
 mem_prefix="${purplef} ${reset}"
+wm_prefix="${cyanf} ${reset}"
 
 for val in ${config[*]}; do
 	case $val in
@@ -87,6 +90,12 @@ for val in ${config[*]}; do
                 pkg="$(apt list --installed | wc -l)"
             fi
 			argconf+=$pkg_prefix' '$pkg'\n'
+		;;
+		wm)
+			id=$(xprop -root -notype _NET_SUPPORTING_WM_CHECK)
+			id=${id##* }
+			wm=$(xprop -id "$id" -notype -len 100 -f _NET_WM_NAME 8t | grep '^_NET_WM_NAME' | cut -d\" -f 2)
+			argconf+=$wm_prefix' '$wm'\n'
 		;;
 	esac
 done
