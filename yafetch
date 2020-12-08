@@ -92,9 +92,14 @@ for val in ${config[*]}; do
 			argconf+=$pkg_prefix' '$pkg'\n'
 		;;
 		wm)
-			id=$(xprop -root -notype _NET_SUPPORTING_WM_CHECK)
-			id=${id##* }
-			wm=$(xprop -id "$id" -notype -len 100 -f _NET_WM_NAME 8t | grep '^_NET_WM_NAME' | cut -d\" -f 2)
+			if command -v wmctrl &> /dev/null
+			then
+				wm=$(wmctrl -m | grep "Name:" | awk '{print $2}')
+			else
+				id=$(xprop -root -notype _NET_SUPPORTING_WM_CHECK)
+				id=${id##* }
+				wm=$(xprop -id "$id" -notype -len 100 -f _NET_WM_NAME 8t | grep '^_NET_WM_NAME' | cut -d\" -f 2)
+			fi
 			argconf+=$wm_prefix' '$wm'\n'
 		;;
 	esac
