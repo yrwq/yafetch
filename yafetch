@@ -2,25 +2,28 @@
 #
 # Yet another fetch ...
 
-colrs() {
-	# colors
-	esc=""
-	redf="${esc}[31m";
-	greenf="${esc}[32m"
-	yellowf="${esc}[33m"
-	bluef="${esc}[34m";
-	purplef="${esc}[35m"
-	cyanf="${esc}[36m";
-	reset="${esc}[0m";
-}
-colrs
+#
+# Configuration
+#
 
-# os, date, time, kernel, pkg, uptime, weather, disk, mem, wm
-config=("os" "date" "time" "kernel" "pkg" "uptime" "weather" "disk" "mem" "wm")
+# Available options
+# os date time, kernel, pkg, uptime, weather, disk, mem, wm
+config=("os" "date" "time" "kernel" "pkg" "uptime" "disk" "mem" "wm")
 
 weather_city="Pécs"
-disk_path=("/dev/sda1")
+disk_path="/dev/sda1"
 
+# Colors
+esc=""
+redf="${esc}[31m";
+greenf="${esc}[32m"
+yellowf="${esc}[33m"
+bluef="${esc}[34m";
+purplef="${esc}[35m"
+cyanf="${esc}[36m";
+reset="${esc}[0m";
+
+# Prefixes
 os_prefix="${redf} ${reset}"
 time_prefix="${redf} ${reset}"
 kernel_prefix="${greenf} ${reset}"
@@ -33,77 +36,92 @@ mem_prefix="${purplef} ${reset}"
 wm_prefix="${cyanf} ${reset}"
 
 for val in ${config[*]}; do
-	case $val in
-		mem)
-			mem_total="$(free -m | grep 'Mem:' | awk '{print $2}' )"
-			mem_used="$(free -m | grep 'Mem:' | awk '{print $3}' )"
-			argconf+=$mem_prefix' '$mem_used'/'$mem_total'M\n'
-			;;
-		time)
-			time="$(date +"%H:%M %p")"
-			argconf+=$time_prefix' '$time'\n'
-			;;
-		date)
-			date="$(date +"%a %F")"
-			argconf+=$date_prefix' '$date'\n'
-			;;
-		kernel)
-			kern="$(uname -sr | sed 's/-.*//')"
-			argconf+=$kernel_prefix' '$kern'\n'
-			;;
-		uptime)
-			upt="$(uptime -p | sed 's/up //')"
-			argconf+=$uptime_prefix' '$upt'\n'
-			;;
-		weather)
-			weather="$(curl -s http://wttr.in/$weather_city?format=3 | awk '{print $3}' )"
-			argconf+=$weather_prefix' '$weather'\n'
-		;;
-		disk)
-			disk_total="$(df -h | grep ${disk_path} | awk '{print $2}')"
-			disk_used="$(df -h | grep ${disk_path} | awk '{print $3}')"
-			argconf+=$disk_prefix' '$disk_used'/'$disk_total'\n'
-		;;
-		os)
-			case "$OSTYPE" in
-  				solaris*) distro="solaris" ;;
-  				darwin*)  distro="osx" ;;
-  				linux*)   . /etc/os-release && distro=$PRETTY_NAME ;;
-  				bsd*)     distro="bsd" ;;
-  				msys*)    distro="windows" ;;
-  				*)        distro="unknown" ;;
-			esac
-			argconf+=$os_prefix' '$distro'\n'
-		;;
-		
+    case $val in
 
-		
+	# Memory
+	mem)
+	    mem_total="$(free -m | grep 'Mem:' | awk '{print $2}' )"
+	    mem_used="$(free -m | grep 'Mem:' | awk '{print $3}' )"
+	    argconf+=$mem_prefix' '$mem_used'/'$mem_total'M\n'
+	    ;;
+
+	# Time
+	time)
+	    time="$(date +"%H:%M %p")"
+	    argconf+=$time_prefix' '$time'\n'
+	    ;;
+
+	# Date
+	date)
+	    date="$(date +"%a %F")"
+	    argconf+=$date_prefix' '$date'\n'
+	    ;;
+
+	# Kernel version
+	kernel)
+	    kern="$(uname -sr | sed 's/-.*//')"
+	    argconf+=$kernel_prefix' '$kern'\n'
+	    ;;
+
+	# Uptime
+	uptime)
+	    upt="$(uptime -p | sed 's/up //')"
+	    argconf+=$uptime_prefix' '$upt'\n'
+	    ;;
+
+	# Weather
+	weather)
+	    weather="$(curl -s http://wttr.in/$weather_city?format=3 | awk '{print $3}' )"
+	    argconf+=$weather_prefix' '$weather'\n'
+	    ;;
+
+	# Hard Drive size
+	disk)
+	    disk_total="$(df -h | grep ${disk_path} | awk '{print $2}')"
+	    disk_used="$(df -h | grep ${disk_path} | awk '{print $3}')"
+	    argconf+=$disk_prefix' '$disk_used'/'$disk_total'\n'
+	    ;;
+
+	# Operating system
+	os)
+	    case "$OSTYPE" in
+  		solaris*) distro="solaris" ;;
+  		darwin*)  distro="osx" ;;
+  		linux*)   . /etc/os-release && distro=$PRETTY_NAME ;;
+  		bsd*)     distro="bsd" ;;
+  		msys*)    distro="windows" ;;
+  		*)        distro="unknown" ;;
+	    esac
+	    argconf+=$os_prefix' '$distro'\n'
+	    ;;
+
+	# Number of packages
 	pkg)
             if command -v pacman &> /dev/null
             then
                 pkg="$(pacman -Qq | wc -l)"
-                elif command -v yay &> /dev/null
+            elif command -v yay &> /dev/null
             then
                 pkg="$(yay -Q | wc -l)"
-                elif command -v cpm &> /dev/null
+            elif command -v cpm &> /dev/null
             then
                 pkg="$(cpm C)"
-                elif command -v brew &> /dev/null
+            elif command -v brew &> /dev/null
             then
                 pkg="$(brew list --formula | wc -l)"
-                elif command -v rpm &> /dev/null
+            elif command -v rpm &> /dev/null
             then
                 pkg="$(rpm -qa --last| wc -l)"
-                elif command -v dnf &> /dev/null
+            elif command -v dnf &> /dev/null
             then
                 pkg="$(dnf list installed | wc -l)"
-                elif command -v kiss &> /dev/null
+            elif command -v kiss &> /dev/null
             then
                 pkg="$(kiss list | wc -l)"
-                elif command -v cave &> /dev/null
+            elif command -v cave &> /dev/null
             then
                 pkg="$(cave show installed-slots | wc -l)"
-                elif command -v nix-env &> /dev/null
+            elif command -v nix-env &> /dev/null
             then
                 pkg="$(nix-store -q --requisites /run/current-system/sw | wc -l)"
             elif command -v dpkg &> /dev/null
@@ -116,20 +134,22 @@ for val in ${config[*]}; do
             then
                 pkg="$(apt list --installed | wc -l)"
             fi
-			argconf+=$pkg_prefix' '$pkg'\n'
-		;;
-		wm)
-			if command -v wmctrl &> /dev/null
-			then
-				wm=$(wmctrl -m | grep "Name:" | awk '{print $2}')
-			else
-				id=$(xprop -root -notype _NET_SUPPORTING_WM_CHECK)
-				id=${id##* }
-				wm=$(xprop -id "$id" -notype -len 100 -f _NET_WM_NAME 8t | grep '^_NET_WM_NAME' | cut -d\" -f 2)
-			fi
-			argconf+=$wm_prefix' '$wm'\n'
-		;;
-	esac
+	    argconf+=$pkg_prefix' '$pkg'\n'
+	    ;;
+
+	# Window Manager
+	wm)
+	    if command -v wmctrl &> /dev/null
+	    then
+		wm=$(wmctrl -m | grep "Name:" | awk '{print $2}')
+	    else
+		id=$(xprop -root -notype _NET_SUPPORTING_WM_CHECK)
+		id=${id##* }
+		wm=$(xprop -id "$id" -notype -len 100 -f _NET_WM_NAME 8t | grep '^_NET_WM_NAME' | cut -d\" -f 2)
+	    fi
+	    argconf+=$wm_prefix' '$wm'\n'
+	    ;;
+    esac
 done
 
 echo ""
