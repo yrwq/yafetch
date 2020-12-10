@@ -17,7 +17,7 @@ curl -s https://raw.githubusercontent.com/yrwq/yafetch/main/yafetch | sh
 ``` sh
 git clone https://github.com/yrwq/yafetch && cd yafetch
 
-make
+sudo make install
 ```
 
-Running `make` will copy yafetch in to ~/.local/bin.
+Running `sudo make install` will copy yafetch in to $(BIN)/yafetch
