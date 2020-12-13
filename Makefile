@@ -1,11 +1,11 @@
-PREFIX?=/usr
-BIN?=$(PREFIX)/bin
+PREFIX ?= /usr
 
 default:
 	@printf "targets:\n  make install\n  make uninstall\n"
 
 install:
-	install -Dm755 yafetch $(BIN)/yafetch
+	@mkdir -p $(DESTDIR)$(PREFIX)/bin
+	@install -Dm755 yafetch $(DESTDIR)$(PREFIX)/bin/yafetch
 
 uninstall:
-	rm -f $(BIN)/yafetch
+	@rm -f $(DESTDIR)$(PREFIX)/bin/yafetch

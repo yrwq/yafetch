@@ -20,4 +20,4 @@ git clone https://github.com/yrwq/yafetch && cd yafetch
 sudo make install
 ```
 
-Running `sudo make install` will copy yafetch in to $(BIN)/yafetch
+Running `sudo make install` will copy yafetch in to $(DESTDIR)$(PREFIX)/bin/yafetch
