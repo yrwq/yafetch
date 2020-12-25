@@ -117,6 +117,7 @@ for val in ${config[*]}; do
         ;;
 
     # Window Manager
+    # You should have wmctrl or xprop installed
     wm)
         if command -v wmctrl &> /dev/null
         then
