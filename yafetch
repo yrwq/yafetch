@@ -97,43 +97,22 @@ for val in ${config[*]}; do
 
     # Number of packages
     pkg)
-        if command -v pacman &> /dev/null
-        then
-            pkg="$(pacman -Qq | wc -l)"
-        elif command -v yay &> /dev/null
-        then
-            pkg="$(yay -Q | wc -l)"
-        elif command -v cpm &> /dev/null
-        then
-            pkg="$(cpm C)"
-        elif command -v brew &> /dev/null
-        then
-            pkg="$(brew list --formula | wc -l)"
-        elif command -v rpm &> /dev/null
-        then
-            pkg="$(rpm -qa --last| wc -l)"
-        elif command -v dnf &> /dev/null
-        then
-            pkg="$(dnf list installed | wc -l)"
-        elif command -v kiss &> /dev/null
-        then
-            pkg="$(kiss list | wc -l)"
-        elif command -v cave &> /dev/null
-        then
-            pkg="$(cave show installed-slots | wc -l)"
-        elif command -v nix-env &> /dev/null
-        then
-            pkg="$(nix-store -q --requisites /run/current-system/sw | wc -l)"
-        elif command -v dpkg &> /dev/null
-        then
-            pkg="$(dpkg --list | wc -l)"
-        elif command -v yum &> /dev/null
-        then
-            pkg="$(yum list installed | wc -l)"
-        elif command -v apt &> /dev/null
-        then
-            pkg="$(apt list --installed | wc -l)"
-        fi
+        manager=$(which nix-env yum zypper dnf rpm apt pacman xbps-query emerge apk kiss 2>/dev/null)
+        manager=${manager##*/}
+        case $manager in
+        apt) pkg="$(dpkg-query -f '${binary:Package}\n' -W | wc -l)";;
+        rpm) pkg="$(rpm -qa --last| wc -l)";;
+        yum) pkg="$(yum list installed | wc -l)";;
+        dnf) pkg="$(dnf list installed | wc -l)";;
+        zypper) pkg="$(zypper se | wc -l)";;
+        pacman) pkg="$(pacman -Q | wc -l)";;
+        kiss) pkg="$(kiss list | wc -l)";;
+        emerge) pkg="$(qlist -I | wc -l)";;
+        xbps-query) pkg="$(xbps-query -l | wc -l)";;
+        nix-env) pkg="$(nix-store -q --requisites /run/current-system/sw | wc -l)";;
+        apk) pkg="$(apk list --installed | wc -l)";;
+        *) pkg="Count it yourself"
+        esac
         argconf+=$pkg_prefix' '$pkg'\n'
         ;;
 
