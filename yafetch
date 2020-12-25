@@ -37,119 +37,118 @@ wm_prefix="${cyanf} ${reset}"
 for val in ${config[*]}; do
     case $val in
 
-	# Memory
-	mem)
-	    mem_total="$(free -m | grep 'Mem:' | awk '{print $2}' )"
-	    mem_used="$(free -m | grep 'Mem:' | awk '{print $3}' )"
-	    argconf+=$mem_prefix' '$mem_used'/'$mem_total'M\n'
-	    ;;
+    # Memory
+    mem)
+        mem_total="$(free -m | grep 'Mem:' | awk '{print $2}' )"
+        mem_used="$(free -m | grep 'Mem:' | awk '{print $3}' )"
+        argconf+=$mem_prefix' '$mem_used'/'$mem_total'M\n'
+        ;;
 
-	# Time
-	time)
-	    time="$(date +"%H:%M %p")"
-	    argconf+=$time_prefix' '$time'\n'
-	    ;;
+    # Time
+    time)
+        time="$(date +"%H:%M %p")"
+        argconf+=$time_prefix' '$time'\n'
+        ;;
 
-	# Date
-	date)
-	    date="$(date +"%a %F")"
-	    argconf+=$date_prefix' '$date'\n'
-	    ;;
+    # Date
+    date)
+        date="$(date +"%a %F")"
+        argconf+=$date_prefix' '$date'\n'
+        ;;
 
-	# Kernel version
-	kernel)
-	    kern="$(uname -sr | sed 's/-.*//')"
-	    argconf+=$kernel_prefix' '$kern'\n'
-	    ;;
+    # Kernel version
+    kernel)
+        kern="$(uname -sr | sed 's/-.*//')"
+        argconf+=$kernel_prefix' '$kern'\n'
+        ;;
 
-	# Uptime
-	uptime)
-	    upt="$(uptime -p | sed 's/up //')"
-	    argconf+=$uptime_prefix' '$upt'\n'
-	    ;;
+    # Uptime
+    uptime)
+        upt="$(uptime -p | sed 's/up //')"
+        argconf+=$uptime_prefix' '$upt'\n'
+        ;;
 
-	# Weather
-	weather)
-	    weather="$(curl -s http://wttr.in/$weather_city?format=3 | awk '{print $3}' )"
-	    argconf+=$weather_prefix' '$weather'\n'
-	    ;;
+    # Weather
+    weather)
+        weather="$(curl -s http://wttr.in/$weather_city?format=3 | awk '{print $3}' )"
+        argconf+=$weather_prefix' '$weather'\n'
+        ;;
 
-	# Hard Drive size
-	disk)
-	    disk=$(df -H / 2>/dev/null | tail -1)
-	    disk_total=$(awk '{print $2}' <<< "${disk}")
-	    disk_used=$(awk '{print $3}' <<< "${disk}")
+    # Hard Drive size
+    disk)
+        disk=$(df -H / 2>/dev/null | tail -1)
+        disk_total=$(awk '{print $2}' <<< "${disk}")
+        disk_used=$(awk '{print $3}' <<< "${disk}")
+        argconf+=$disk_prefix' '$disk_used'/'$disk_total'\n'
+        ;;
 
-	    argconf+=$disk_prefix' '$disk_used'/'$disk_total'\n'
-	    ;;
+    # Operating system
+    os)
+        case "$OSTYPE" in
+        solaris*) distro="solaris" ;;
+        darwin*)  distro="osx" ;;
+        linux*)   . /etc/os-release && distro=$PRETTY_NAME ;;
+        bsd*)     distro="bsd" ;;
+        msys*)    distro="windows" ;;
+        *)        distro="unknown" ;;
+        esac
+        argconf+=$os_prefix' '$distro'\n'
+        ;;
 
-	# Operating system
-	os)
-	    case "$OSTYPE" in
-  		solaris*) distro="solaris" ;;
-  		darwin*)  distro="osx" ;;
-  		linux*)   . /etc/os-release && distro=$PRETTY_NAME ;;
-  		bsd*)     distro="bsd" ;;
-  		msys*)    distro="windows" ;;
-  		*)        distro="unknown" ;;
-	    esac
-	    argconf+=$os_prefix' '$distro'\n'
-	    ;;
+    # Number of packages
+    pkg)
+        if command -v pacman &> /dev/null
+        then
+            pkg="$(pacman -Qq | wc -l)"
+        elif command -v yay &> /dev/null
+        then
+            pkg="$(yay -Q | wc -l)"
+        elif command -v cpm &> /dev/null
+        then
+            pkg="$(cpm C)"
+        elif command -v brew &> /dev/null
+        then
+            pkg="$(brew list --formula | wc -l)"
+        elif command -v rpm &> /dev/null
+        then
+            pkg="$(rpm -qa --last| wc -l)"
+        elif command -v dnf &> /dev/null
+        then
+            pkg="$(dnf list installed | wc -l)"
+        elif command -v kiss &> /dev/null
+        then
+            pkg="$(kiss list | wc -l)"
+        elif command -v cave &> /dev/null
+        then
+            pkg="$(cave show installed-slots | wc -l)"
+        elif command -v nix-env &> /dev/null
+        then
+            pkg="$(nix-store -q --requisites /run/current-system/sw | wc -l)"
+        elif command -v dpkg &> /dev/null
+        then
+            pkg="$(dpkg --list | wc -l)"
+        elif command -v yum &> /dev/null
+        then
+            pkg="$(yum list installed | wc -l)"
+        elif command -v apt &> /dev/null
+        then
+            pkg="$(apt list --installed | wc -l)"
+        fi
+        argconf+=$pkg_prefix' '$pkg'\n'
+        ;;
 
-	# Number of packages
-	pkg)
-            if command -v pacman &> /dev/null
-            then
-                pkg="$(pacman -Qq | wc -l)"
-            elif command -v yay &> /dev/null
-            then
-                pkg="$(yay -Q | wc -l)"
-            elif command -v cpm &> /dev/null
-            then
-                pkg="$(cpm C)"
-            elif command -v brew &> /dev/null
-            then
-                pkg="$(brew list --formula | wc -l)"
-            elif command -v rpm &> /dev/null
-            then
-                pkg="$(rpm -qa --last| wc -l)"
-            elif command -v dnf &> /dev/null
-            then
-                pkg="$(dnf list installed | wc -l)"
-            elif command -v kiss &> /dev/null
-            then
-                pkg="$(kiss list | wc -l)"
-            elif command -v cave &> /dev/null
-            then
-                pkg="$(cave show installed-slots | wc -l)"
-            elif command -v nix-env &> /dev/null
-            then
-                pkg="$(nix-store -q --requisites /run/current-system/sw | wc -l)"
-            elif command -v dpkg &> /dev/null
-            then
-                pkg="$(dpkg --list | wc -l)"
-            elif command -v yum &> /dev/null
-            then
-                pkg="$(yum list installed | wc -l)"
-            elif command -v apt &> /dev/null
-            then
-                pkg="$(apt list --installed | wc -l)"
-            fi
-	    argconf+=$pkg_prefix' '$pkg'\n'
-	    ;;
-
-	# Window Manager
-	wm)
-	    if command -v wmctrl &> /dev/null
-	    then
-		wm=$(wmctrl -m | grep "Name:" | awk '{print $2}')
-	    else
-		id=$(xprop -root -notype _NET_SUPPORTING_WM_CHECK)
-		id=${id##* }
-		wm=$(xprop -id "$id" -notype -len 100 -f _NET_WM_NAME 8t | grep '^_NET_WM_NAME' | cut -d\" -f 2)
-	    fi
-	    argconf+=$wm_prefix' '$wm'\n'
-	    ;;
+    # Window Manager
+    wm)
+        if command -v wmctrl &> /dev/null
+        then
+            wm=$(wmctrl -m | grep "Name:" | awk '{print $2}')
+        else
+        id=$(xprop -root -notype _NET_SUPPORTING_WM_CHECK)
+        id=${id##* }
+        wm=$(xprop -id "$id" -notype -len 100 -f _NET_WM_NAME 8t | grep '^_NET_WM_NAME' | cut -d\" -f 2)
+        fi
+        argconf+=$wm_prefix' '$wm'\n'
+        ;;
     esac
 done
 
