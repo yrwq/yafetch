@@ -1,21 +1,7 @@
-## Yet another fetch ...
+### Yafetch
 
-<p align="center">
-<img src="https://0x0.st/i7Se.png">
-</p>
+Yafetch is a minimal command line system information tool written in C and configured in Lua.
 
-### Installation
+### Usage
 
-#### Use it without installing
-
-``` sh
-curl -s https://raw.githubusercontent.com/yrwq/yafetch/main/yafetch | sh
-```
-
-#### Use it locally
-
-``` sh
-git clone https://github.com/yrwq/yafetch && cd yafetch
-
-sudo make install
-```
+#### Api

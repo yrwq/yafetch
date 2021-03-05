@@ -1,11 +1,18 @@
-PREFIX ?= /usr
+PROJECT = yafetch
+CFLAGS := $(shell pkg-config --cflags lua5.1)
+LDFLAGS := $(shell pkg-config --libs lua5.1)
+OBJECTS = src/script.o src/func.o src/main.o
 
-default:
-	@printf "targets:\n  make install\n  make uninstall\n"
+PREFIX = /usr/local
+BINDIR = $(PREFIX)/bin
 
-install:
-	@mkdir -p $(DESTDIR)$(PREFIX)/bin
-	@install -Dm755 yafetch $(DESTDIR)$(PREFIX)/bin/yafetch
+all: $(PROJECT)
 
-uninstall:
-	@rm -f $(DESTDIR)$(PREFIX)/bin/yafetch
+$(PROJECT): $(OBJECTS)
+	gcc $^ $(LDFLAGS) -o $@
+
+install: $(PROJECT)
+	install -Dm755 yafetch $(BINDIR)
+
+clean:
+	rm -f $(PROJECT) $(OBJECTS)
