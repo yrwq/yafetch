@@ -28,11 +28,25 @@ local kernel_icon = " "
 local pkgs = yafetch.pkgs()
 local pkgs_icon = " "
 
+local distro = yafetch.distro()
+local distro_icon
+
+if distro == "Arch Linux" then
+    distro_icon = " "
+elseif distro == "Ubuntu" then
+    distro_icon = " "
+elseif distro == "Alpine Linux" then
+    distro_icon = " "
+else
+    distro_icon = " "
+end
+
 function yafetch.init()
     print("")
-    yafetch.header(red, hostname, wht, username)
+    yafetch.header(wht, hostname, wht, username)
+    yafetch.format(red, distro_icon, wht, distro)
     yafetch.format(grn, shell_icon, wht, shell)
-    yafetch.format(blu, kernel_icon, wht, kernel)
-    yafetch.format(mag, pkgs_icon, wht, pkgs)
+    yafetch.format(yel, kernel_icon, wht, kernel)
+    yafetch.format(blu, pkgs_icon, wht, pkgs)
     print("")
 end

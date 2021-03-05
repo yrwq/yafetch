@@ -19,6 +19,33 @@ LFUNC(user){
     if(username) {
         lua_pushstring(L, username);
     } else lua_pushstring(L, "unknown");
+
+    return 1;
+}
+
+LFUNC(distro) {
+    char *def = malloc(512);
+    char *new = malloc(512);
+    int line = 0;
+    FILE *f = fopen("/etc/os-release", "rt");
+
+    while (fgets(def, 512, f)) {
+        snprintf(new, 512, "%.*s", 511, def+4);
+        if (strncmp(new, "=", 1) == 0) break;
+        line++; }
+    fclose(f);
+    free(def);
+
+    if (strncmp(new, "=", 1) == 0) {
+        int len = strlen(new);
+        for (int i = 0; i<len; i++){
+            if (new[i] == '\"' || new[i] == '=') {
+                for (int ii = 0; ii<len; ii++) new[ii] = new[ii+1];
+                new[strlen(new)-1] = '\0';
+            }
+         }
+    }
+    lua_pushstring(L, new);
     return 1;
 }
 
@@ -172,6 +199,7 @@ void func_reg(void){
     REG(shell)
     REG(user)
     REG(hostname)
+    REG(distro)
     REG(kernel)
     REG(pkgs)
     REG(format)
