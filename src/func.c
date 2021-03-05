@@ -111,16 +111,27 @@ LFUNC(shell){
 /* yafetch.header() */
 LFUNC(header){
 
+    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+
+    lua_getfield(L, -1, "header_sep");
+    const char * sep = lua_tostring(L, -1);
+
+    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+
+    lua_getfield(L, -1, "header_sep_color");
+    const char * sep_color = lua_tostring(L, -1);
+    lua_pop(L, 0);
+
     /* Get arguments from lua function */
-    const char * hostname_color = lua_tostring(L, 1);
-    const char * hostname = lua_tostring(L, 2);
+    const char * h1_col = lua_tostring(L, 1);
+    const char * h1 = lua_tostring(L, 2);
 
     /* Info */
-    const char * user_color = lua_tostring(L, 3);
-    const char * user = lua_tostring(L, 4);
+    const char * h2_col = lua_tostring(L, 3);
+    const char * h2 = lua_tostring(L, 4);
 
-    printf("%7s%s%s@%s%s%s\n",
-            hostname_color, hostname, reset, user_color, user, reset);
+    printf("%7s%s%s%s%s%s%s%s%s\n",
+            h1_col, h1, reset, sep_color, sep, reset, h2_col, h2, reset);
     return 1;
 }
 
@@ -128,6 +139,17 @@ LFUNC(header){
 /* Formats given strings. */
 /* Helpers function to output information */
 LFUNC(format){
+
+    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+
+    lua_getfield(L, -1, "sep");
+    const char * sep = lua_tostring(L, -1);
+
+    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+
+    lua_getfield(L, -1, "sep_color");
+    const char * sep_color = lua_tostring(L, -1);
+    lua_pop(L, 0);
 
     /* Get arguments from lua function */
     /* Icon */
@@ -138,8 +160,8 @@ LFUNC(format){
     const char * col_info = lua_tostring(L, 3);
     const char * info = lua_tostring(L, 4);
 
-    printf("%7s%s%s ~ %s%s%s\n",
-            col_icon, icon, reset, col_info, info, reset);
+    printf("%7s%s%s%s%s%s%s%s%s\n",
+            col_icon, icon, reset, sep_color, sep, reset, col_info, info, reset);
     return 1;
 }
 
