@@ -23,6 +23,9 @@ sudo make install
 
 ## Configuration
 
+[variables](https://github.com/yrwq/yafetch#variables)
+[functions](https://github.com/yrwq/yafetch#functions)
+
 ### Variables
 
 #### yafetch.sep
