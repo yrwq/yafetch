@@ -44,9 +44,9 @@ end
 
 ascii1 = wht .. "  ,d88b.d88b,    "
 ascii2 = red .. "  88888888888    "
-ascii3 = grn .. "  `Y8888888Y'    "
-ascii4 = yel .. "    `Y888Y'      "
-ascii5 = blu .. "      `Y'        "
+ascii3 = grn .. "  `Y8888888Y´    "
+ascii4 = yel .. "    `Y888Y´      "
+ascii5 = blu .. "      `Y´        "
 
 
 function yafetch.init()
