@@ -7,7 +7,7 @@ Yafetch is a minimal command line system information tool written in C and confi
 - a linux distribution
 - a compiler
 - `lua5.1`
--
+
 ### Installation
 
 ```zsh
@@ -19,4 +19,26 @@ sudo make install
 
 ### Usage
 
-#### Api
+`yafetch` or `yafetch <config.lua>`
+
+### Configuration
+
+#### Variables
+
+#### yafetch.sep
+#### yafetch.sep_color
+#### yafetch.header_sep
+#### yafetch.header_sep_color
+
+#### Functions
+
+##### yafetch.init()
+##### yafetch.format()
+##### yafetch.header()
+##### yafetch.distro()
+##### yafetch.pkgs()
+##### yafetch.kernel()
+##### yafetch.user()
+##### yafetch.hostname()
+##### yafetch.shell()
+
