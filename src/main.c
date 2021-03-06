@@ -15,7 +15,7 @@ int main(int argc, char ** argv){
         if( access( config_file, F_OK ) != -1 ) {
             script_run(config_file);
         } else {
-            printf("\n%sYafetch%s: %s doesn't exists!\n\n", red, reset, config_file);
+            printf("\n%sYafetch%s: %s doesn't exist!\n\n", red, reset, config_file);
         }
     } else script_run(argv[1]);
 
