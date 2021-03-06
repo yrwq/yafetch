@@ -1,6 +1,6 @@
 <p align="center"> <img src="http://0x0.st/-P91.png"> </p>
 
-<h3 align="center">Yafetch is a minimal command line system information tool written in C and configured in Lua. </h3>
+<h2 align="center">Yafetch is a minimal command line system information tool written in C and configured in Lua. </h2>
 
 ## Dependencies
 
