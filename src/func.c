@@ -23,10 +23,13 @@ LFUNC(user){
     return 1;
 }
 
+/* yafetch.distro() */
+/* Returns name of linux distribution */
 LFUNC(distro) {
     char *def = malloc(512);
     char *new = malloc(512);
     int line = 0;
+
     FILE *f = fopen("/etc/os-release", "rt");
 
     while (fgets(def, 512, f)) {
@@ -50,7 +53,7 @@ LFUNC(distro) {
 }
 
 /* yafetch.hostname() */
-/* Returns hostname */
+/* Returns hostname of the machine */
 LFUNC(hostname){
     char hostname[1024];
     hostname[1023] = '\0';

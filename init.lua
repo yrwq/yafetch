@@ -42,12 +42,11 @@ else
     distro_icon = " "
 end
 
-ascii1 = wht .. "  ,d88b.d88b,    "
-ascii2 = red .. "  88888888888    "
-ascii3 = grn .. "  `Y8888888Y´    "
-ascii4 = yel .. "    `Y888Y´      "
-ascii5 = blu .. "      `Y´        "
-
+local ascii1 = wht .. "  ,d88b.d88b,    "
+local ascii2 = red .. "  88888888888    "
+local ascii3 = grn .. "  `Y8888888Y´    "
+local ascii4 = yel .. "    `Y888Y´      "
+local ascii5 = blu .. "      `Y´        "
 
 function yafetch.init()
     print("")
