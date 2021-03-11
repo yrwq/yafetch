@@ -2,6 +2,7 @@
 #include <lauxlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <pwd.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/sysinfo.h>
@@ -15,10 +16,14 @@
 /* Returns 'USER' environment variable */
 LFUNC(user){
 
-    char * username = getenv("USER");
-    if(username) {
-        lua_pushstring(L, username);
-    } else lua_pushstring(L, "unknown");
+    uid_t uid = geteuid();
+    struct passwd *pw = getpwuid(uid);
+
+    if(pw) {
+        lua_pushstring(L, pw->pw_name);
+    } else {
+        lua_pushstring(L, "unknown");
+    }
 
     return 1;
 }
