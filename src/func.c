@@ -13,7 +13,7 @@
 #define LFUNC(N) int lua_##N(lua_State * L)
 
 /* yafetch.user() */
-/* Returns 'USER' environment variable */
+/* Returns username */
 LFUNC(user){
 
     uid_t uid = geteuid();
@@ -22,7 +22,7 @@ LFUNC(user){
     if(pw) {
         lua_pushstring(L, pw->pw_name);
     } else {
-        lua_pushstring(L, "unknown");
+    lua_pushstring(L, "unknown");
     }
 
     return 1;
@@ -41,6 +41,7 @@ LFUNC(distro) {
         snprintf(new, 512, "%.*s", 511, def+4);
         if (strncmp(new, "=", 1) == 0) break;
         line++; }
+
     fclose(f);
     free(def);
 
@@ -53,16 +54,22 @@ LFUNC(distro) {
             }
          }
     }
-    lua_pushstring(L, new);
+
+    if(new) {
+        lua_pushstring(L, new);
+    } else {
+        lua_pushstring(L, "unknown");
+    }
     return 1;
 }
 
 /* yafetch.hostname() */
 /* Returns hostname of the machine */
 LFUNC(hostname){
-    char hostname[1024];
-    hostname[1023] = '\0';
-    gethostname(hostname, 1023);
+    /* Maximum characters of the hostname can be 255 on linux(+1 0 terminator) */
+    char hostname[255];
+    gethostname(hostname, 255);
+
     lua_pushstring(L, hostname);
     return 1;
 }
@@ -70,38 +77,46 @@ LFUNC(hostname){
 /* yafetch.pkgs() */
 /* Returns number of installed packages */
 LFUNC(pkgs){
-    int apt, dnf, emerge, flatpak, nix, pacman, rpm, xbps, total = 0;
+    int apt, dnf, emerge, nix, pacman, rpm, xbps, bonsai, apk, total = 0;
 
-    FILE *file[8];
+    FILE *file[9];
     file[0] = popen("dpkg-query -f '${binary:Package}\n' -W 2> /dev/null | wc -l", "r");
     file[1] = popen("dnf list installed 2> /dev/null | wc -l", "r");
     file[2] = popen("qlist -I 2> /dev/null | wc -l", "r");
-    file[3] = popen("flatpak list 2> /dev/null | wc -l", "r");
-    file[4] = popen("nix-store -q --requisites /run/current-sys_vartem/sw 2> /dev/null | wc -l", "r");
-    file[5] = popen("pacman -Qq 2> /dev/null | wc -l", "r");
-    file[6] = popen("rpm -qa --last 2> /dev/null | wc -l", "r");
-    file[7] = popen("xbps-query -l 2> /dev/null | wc -l", "r");
+    file[3] = popen("nix-store -q --requisites /run/current-sys_vartem/sw 2> /dev/null | wc -l", "r");
+    file[4] = popen("pacman -Qq 2> /dev/null | wc -l", "r");
+    file[5] = popen("rpm -qa --last 2> /dev/null | wc -l", "r");
+    file[6] = popen("xbps-query -l 2> /dev/null | wc -l", "r");
+    file[7] = popen("bonsai list  2> /dev/null | wc -l", "r");
+    file[8] = popen("apk info 2> /dev/null | wc -l", "r");
 
     fscanf(file[0], "%d", &apt);
     fscanf(file[1], "%d", &dnf);
     fscanf(file[2], "%d", &emerge);
-    fscanf(file[3], "%d", &flatpak);
-    fscanf(file[4], "%d", &nix);
-    fscanf(file[5], "%d", &pacman);
-    fscanf(file[6], "%d", &rpm);
-    fscanf(file[7], "%d", &xbps);
-    for (int i = 0; i < 8; i++) fclose(file[i]);
+    fscanf(file[3], "%d", &nix);
+    fscanf(file[4], "%d", &pacman);
+    fscanf(file[5], "%d", &rpm);
+    fscanf(file[6], "%d", &xbps);
+    fscanf(file[7], "%d", &bonsai);
+    fscanf(file[8], "%d", &apk);
+    for (int i = 0; i < 9; i++) fclose(file[i]);
 
     if (apt > 0) total += apt;
     if (dnf > 0) total += dnf;
     if (emerge > 0) total += emerge;
-    if (flatpak > 0) total += flatpak;
     if (nix > 0) total += nix;
     if (pacman > 0) total += pacman;
     if (rpm > 0) total += rpm;
     if (xbps > 0) total += xbps;
+    if (bonsai > 0) total += bonsai;
+    if (apk > 0) total += apk;
 
-    lua_pushinteger(L, total);
+    if(total) {
+        lua_pushinteger(L, total);
+    } else {
+        lua_pushinteger(L, 0);
+    }
+
     return 1;
 }
 
@@ -110,11 +125,14 @@ LFUNC(pkgs){
 LFUNC(kernel) {
     static char ret[255];
     struct utsname sys;
-
     uname(&sys);
 
     char * kernel = sys.release;
-    lua_pushstring(L, kernel);
+    if(kernel) {
+        lua_pushstring(L, kernel);
+    } else {
+        lua_pushstring(L, "unknown");
+    }
     return 1;
 }
 
@@ -131,13 +149,13 @@ LFUNC(shell){
     /* Get basename of shell by looking for last '/' */
     char * slash = strrchr(shell, '/');
 
-    if (shell_full == 1) {
-        if (slash) {
+    if(shell) {
+        if (shell_full == 1) {
             shell = slash + 1;
         }
         lua_pushstring(L, shell);
     } else {
-        lua_pushstring(L, shell);
+        lua_pushstring(L, "unknown");
     }
 
     return 1;

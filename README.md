@@ -30,6 +30,14 @@ Yafetch is extensible in lua, the default location for the config is `~/.config/
 
 ## Variables
 
+### yafetch.shell_base
+
+If set to false, [yafetch.shell()]( ###yafetch.shell() will return its whole path, example `/usr/bin/zsh`
+
+```lua
+yafetch.shell_base = true
+```
+
 ### yafetch.sep
 
 Separator used between the information and the icon.
