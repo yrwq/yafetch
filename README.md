@@ -57,11 +57,11 @@ yafetch.sep_color = "\27[31m"
 
 ### yafetch.header_sep
 
-The [separator](yafetch.sep) used in the header.
+The [separator](#yafetch.sep) used in the header.
 
 ### yafetch.header_sep_color
 
-The [separator color](yafetch.sep_color) used in the header.
+The [separator_color](#yafetch.sep_color) used in the header.
 
 ## Functions
 
