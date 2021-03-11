@@ -2,13 +2,13 @@
 
 <h4 align="center">Yafetch is a minimal command line system information tool written in C and configured in Lua. </h4>
 
-## Dependencies
+# Dependencies
 
 - a linux distribution
 - a compiler
 - `lua5.1`
 
-## Installation
+# Installation
 
 ```zsh
 git clone https://github.com/yrwq/yafetch && cd yafetch
@@ -17,20 +17,20 @@ make config # optional (copies default config to $HOME/.config/yafetch)
 sudo make install
 ```
 
-## Usage
+# Usage
 
 `yafetch` or `yafetch <config.lua>`
 
-## Configuration
+# Configuration
 
 Yafetch is extensible in lua, the default location for the config is `~/.config/yafetch/init.lua`
 
 [variables](https://github.com/yrwq/yafetch#variables)
 [functions](https://github.com/yrwq/yafetch#functions)
 
-### Variables
+## Variables
 
-#### yafetch.sep
+### yafetch.sep
 
 Separator used between the information and the icon.
 Can be any string or character.
@@ -39,7 +39,7 @@ Can be any string or character.
 yafetch.sep = " ~ "
 ```
 
-#### yafetch.sep_color
+### yafetch.sep_color
 
 Foreground color used to colorize the separator.
 
@@ -47,17 +47,17 @@ Foreground color used to colorize the separator.
 yafetch.sep_color = "\27[31m"
 ```
 
-#### yafetch.header_sep
+### yafetch.header_sep
 
 The [separator](yafetch.sep) used in the header.
 
-#### yafetch.header_sep_color
+### yafetch.header_sep_color
 
 The [separator color](yafetch.sep_color) used in the header.
 
-### Functions
+## Functions
 
-##### yafetch.init()
+### yafetch.init()
 
 Main function of the fetch, formatting goes in this function.
 
@@ -67,7 +67,7 @@ yafetch.init = function()
 end
 ```
 
-##### yafetch.format()
+### yafetch.format()
 
 Format a line in the fetch, takes 4 arguments,
 
@@ -81,7 +81,7 @@ The identifier can be any string, personally i use icons from [Nerd Fonts](https
 
 The information should be a function from below.
 
-##### yafetch.header()
+### yafetch.header()
 
 Format a header, usually your username and hostname goes here.
 
@@ -89,27 +89,27 @@ Format a header, usually your username and hostname goes here.
 yafetch.header(color, yafetch.hostname(), color, yafetch.username())
 ```
 
-##### yafetch.distro()
+### yafetch.distro()
 
 Returns current linux distrobution
 
-##### yafetch.pkgs()
+### yafetch.pkgs()
 
 Detects package manager, returns number of packages installed.
 
-##### yafetch.kernel()
+### yafetch.kernel()
 
 Returns kernel version
 
-##### yafetch.user()
+### yafetch.user()
 
 Returns username
 
-##### yafetch.hostname()
+### yafetch.hostname()
 
 Returns hostname
 
-##### yafetch.shell()
+### yafetch.shell()
 
 Returns shell
 
