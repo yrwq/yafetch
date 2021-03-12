@@ -63,6 +63,17 @@ The [separator](#yafetch.sep) used in the header.
 
 The [separator_color](#yafetch.sep_color) used in the header.
 
+### yafetch.header_format
+
+Add extra formatting to the header, can be any string.
+
+```lua
+yafetch.header_format = ascii[1] -- adds first line of ascii before header
+yafetch.header_format = "\27[1m"
+```
+
+The [separator_color](#yafetch.sep_color) used in the header.
+
 ## Functions
 
 ### yafetch.init()
@@ -91,10 +102,10 @@ The information should be a function from below.
 
 ### yafetch.header()
 
-Format a header, usually your username and hostname goes here.
+Returns formatted username and hostname
 
 ```lua
-yafetch.header(color, yafetch.hostname(), color, yafetch.username())
+yafetch.header()
 ```
 
 ### yafetch.distro()

@@ -11,9 +11,6 @@ local res = "\27[0m"
 yafetch.sep = " ~ "
 yafetch.sep_color = bold
 
-yafetch.header_sep = "@"
-yafetch.header_sep_color = bold
-
 -- if set to false, yafetch.shell() will return
 -- the full path of the current shell
 yafetch.shell_base = true
@@ -48,11 +45,13 @@ local ascii3 = grn .. "  `Y8888888Y´    " .. res
 local ascii4 = yel .. "    `Y888Y´      " .. res
 local ascii5 = blu .. "      `Y´        " .. res
 
+yafetch.header_sep = "@"
+yafetch.header_sep_color = bold
 yafetch.header_format = ascii1
 
 function yafetch.init()
     print("")
-    yafetch.header(ascii1)
+    yafetch.header()
     -- yafetch.header()
     yafetch.format(ascii2 .. res .. red, distro_icon, wht, distro)
     yafetch.format(ascii3 .. res .. grn, shell_icon, wht, shell)
