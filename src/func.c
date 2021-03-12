@@ -169,22 +169,58 @@ LFUNC(header){
     lua_getfield(L, -1, "header_sep");
     const char * sep = lua_tostring(L, -1);
 
+    if(lua_isnil(L, -1) == 1) {
+        sep = "@";
+    }
+
     lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
 
     lua_getfield(L, -1, "header_sep_color");
     const char * sep_color = lua_tostring(L, -1);
     lua_pop(L, 0);
 
+    if(lua_isnil(L, -1) == 1) {
+        sep_color = "";
+    }
+
+    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+
+    lua_getfield(L, -1, "header_format");
+    const char * fmt = lua_tostring(L, -1);
+    lua_pop(L, 0);
+
+    if(lua_isnil(L, -1) == 1) {
+        fmt = "";
+    }
+
     /* Get arguments from lua function */
-    const char * h1_col = lua_tostring(L, 1);
-    const char * h1 = lua_tostring(L, 2);
+    /* Header color */
+    const char * h1_col;
+    h1_col = "\033[0m";
+    /* Second header color */
+    const char * h2_col;
+    h2_col = "\033[0m";
 
-    /* Info */
-    const char * h2_col = lua_tostring(L, 3);
-    const char * h2 = lua_tostring(L, 4);
+    /* Get hostname */
+    char hostname[255];
+    gethostname(hostname, 255);
 
-    printf("%7s%s%s%s%s%s%s%s%s\n",
-            h1_col, h1, reset, sep_color, sep, reset, h2_col, h2, reset);
+    /* Get username */
+    uid_t uid = geteuid();
+    struct passwd *pw = getpwuid(uid);
+
+    printf("%s%s%s%s%s%s%s%s%s%s\n",
+            h1_col,
+            fmt,
+            hostname,
+            reset,
+            sep_color,
+            sep,
+            reset,
+            h2_col,
+            pw->pw_name,
+            reset);
+
     return 1;
 }
 

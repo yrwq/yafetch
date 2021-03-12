@@ -23,37 +23,40 @@ local shell_icon = " "
 local username = yafetch.user()
 local hostname = yafetch.hostname()
 
--- local kernel = yafetch.kernel()
--- local kernel_icon = " "
+local kernel = yafetch.kernel()
+local kernel_icon = " "
 
 local pkgs = yafetch.pkgs()
 local pkgs_icon = " "
 
--- local distro = yafetch.distro()
--- local distro_icon
+local distro = yafetch.distro()
+local distro_icon
 
--- if distro == "Arch Linux" then
---     distro_icon = " "
--- elseif distro == "Ubuntu" then
---     distro_icon = " "
--- elseif distro == "Alpine Linux" then
---     distro_icon = " "
--- else
---     distro_icon = " "
--- end
+if distro == "Arch Linux" then
+    distro_icon = " "
+elseif distro == "Ubuntu" then
+    distro_icon = " "
+elseif distro == "Alpine Linux" then
+    distro_icon = " "
+else
+    distro_icon = " "
+end
 
-local ascii1 = wht .. "  ,d88b.d88b,    "
-local ascii2 = red .. "  88888888888    "
-local ascii3 = grn .. "  `Y8888888Y´    "
-local ascii4 = yel .. "    `Y888Y´      "
-local ascii5 = blu .. "      `Y´        "
+local ascii1 = wht .. "  ,d88b.d88b,    " .. res
+local ascii2 = red .. "  88888888888    " .. res
+local ascii3 = grn .. "  `Y8888888Y´    " .. res
+local ascii4 = yel .. "    `Y888Y´      " .. res
+local ascii5 = blu .. "      `Y´        " .. res
+
+yafetch.header_format = ascii1
 
 function yafetch.init()
     print("")
-    yafetch.header(ascii1 .. res .. wht, hostname, wht, username)
-    -- yafetch.format(ascii2 .. res .. red, distro_icon, wht, distro)
+    yafetch.header(ascii1)
+    -- yafetch.header()
+    yafetch.format(ascii2 .. res .. red, distro_icon, wht, distro)
     yafetch.format(ascii3 .. res .. grn, shell_icon, wht, shell)
-    -- yafetch.format(ascii4 .. res .. yel, kernel_icon, wht, kernel)
+    yafetch.format(ascii4 .. res .. yel, kernel_icon, wht, kernel)
     yafetch.format(ascii5 .. res .. blu, pkgs_icon, wht, pkgs)
     print("")
 end
