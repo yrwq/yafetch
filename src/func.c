@@ -83,7 +83,7 @@ LFUNC(pkgs){
     file[0] = popen("dpkg-query -f '${binary:Package}\n' -W 2> /dev/null | wc -l", "r");
     file[1] = popen("dnf list installed 2> /dev/null | wc -l", "r");
     file[2] = popen("qlist -I 2> /dev/null | wc -l", "r");
-    file[3] = popen("nix-store -q --requisites /run/current-sys_vartem/sw 2> /dev/null | wc -l", "r");
+    file[3] = popen("nix-store -q --requisites /run/current-system/sw 2> /dev/null | wc -l", "r");
     file[4] = popen("pacman -Qq 2> /dev/null | wc -l", "r");
     file[5] = popen("rpm -qa --last 2> /dev/null | wc -l", "r");
     file[6] = popen("xbps-query -l 2> /dev/null | wc -l", "r");

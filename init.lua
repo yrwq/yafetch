@@ -31,6 +31,8 @@ local distro_icon
 
 if distro == "Arch Linux" then
     distro_icon = " "
+elseif distro == "NixOS" then
+    distro_icon = " "
 elseif distro == "Ubuntu" then
     distro_icon = " "
 elseif distro == "Alpine Linux" then
