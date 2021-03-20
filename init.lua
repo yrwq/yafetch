@@ -49,12 +49,11 @@ local ascii5 = blu .. "      `Y´        " .. res
 
 yafetch.header_sep = "@"
 yafetch.header_sep_color = bold
-yafetch.header_format = ascii1
+yafetch.header_format = ascii1 -- could be ascii1, an icon, etc.
 
 function yafetch.init()
     print("")
     yafetch.header()
-    -- yafetch.header()
     yafetch.format(ascii2 .. res .. red, distro_icon, wht, distro)
     yafetch.format(ascii3 .. res .. grn, shell_icon, wht, shell)
     yafetch.format(ascii4 .. res .. yel, kernel_icon, wht, kernel)

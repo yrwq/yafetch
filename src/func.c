@@ -191,6 +191,8 @@ LFUNC(header){
 
     if(lua_isnil(L, -1) == 1) {
         fmt = "";
+    } else if(lua_isnone(L, -1) == 1) {
+        fmt = "";
     }
 
     /* Get arguments from lua function */
