@@ -1,11 +1,5 @@
 # Configuring Yafetch
 
-Yafetch can be configured in Lua, you can find the default configuration at
-
-` /home/USER/.config/yafetch/init.lua `
-
-If you don't have a config, run `make config` in the root directory of yafetch.
-
 ## Variables
 
 #### yafetch.shell_base
