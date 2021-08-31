@@ -214,13 +214,13 @@ LFUNC(header){
     printf("%s%s%s%s%s%s%s%s%s%s\n",
             h1_col,
             fmt,
-            hostname,
+            pw->pw_name,
             reset,
             sep_color,
             sep,
             reset,
             h2_col,
-            pw->pw_name,
+            hostname,
             reset);
 
     return 1;
