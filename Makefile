@@ -4,7 +4,7 @@ LDFLAGS := $(shell pkg-config --libs lua5.1)
 OBJECTS = src/script.o src/func.o src/main.o
 
 CONF = ${XDG_CONFIG_HOME}/yafetch
-PREFIX = /usr
+PREFIX = /usr/local
 BINDIR = $(PREFIX)/bin
 
 all: $(PROJECT)
