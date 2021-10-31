@@ -10,6 +10,6 @@ sudo make install
 https://aur.archlinux.org/packages/yafetch-git/  (NOTE: This is not this fork, it's the original)
 
 # Gentoo ebuild
-[app-misc/yafetch::dinolay](ari-web.netlify.app/gentooatom/app-misc/yafetch)
+[app-misc/yafetch::dinolay](https://ari-web.netlify.app/gentooatom/app-misc/yafetch)
 
 ## Suggestions and more sources are welcome (PRs are open)
