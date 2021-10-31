@@ -4,7 +4,7 @@ LDFLAGS := $(shell pkg-config --libs lua5.1)
 OBJECTS = src/script.o src/func.o src/main.o
 
 CONF ?= /usr/share/yafetch
-PREFIX ?= /usr/local
+PREFIX ?= /usr
 BINDIR = $(PREFIX)/bin
 
 all: $(PROJECT)
