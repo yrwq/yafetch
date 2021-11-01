@@ -10,12 +10,7 @@
 
 # Installation
 
-```zsh
-git clone https://github.com/yrwq/yafetch && cd yafetch
-make
-make config # optional (copies default config to $HOME/.config/yafetch)
-sudo make install
-```
+check [INSTALLATION.md](INSTALLATION.md)
 
 # Usage
 
