@@ -9,9 +9,10 @@ These variables are:
 - **LDFLAGS** -- what linker flags to pass to your linker, by default it's lua's flags, extra flags are prepended
 - **CONF** -- a directory where to put default configuration, by default it's `/usr/share/yafetch`
 - **PREFIX** -- a directory where to put the compiled binary when installing, by default it's `/usr/local`
-- **BINDIR** -- an exact full path to the binary folder when installing
+- **BINDIR** -- an exact full path to the binary folder when installing, by default it's `PREFX` + `/bin`
 - **CC** -- your C compiler
 - **DESTDIR** -- the destination directory
+- **STRIPFLAGS** -- flags to pass to the binary stripper
 
 
 # Example
