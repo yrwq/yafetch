@@ -28,7 +28,7 @@ void script_run(char * filename){
     (luaL_loadfile(L, filename) || lua_pcall(L, 0, LUA_MULTRET, 0));
 
     /* Look for a table called 'yafetch' */
-    lua_getglobal(L, "yafetch");
+    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
     if(!lua_istable(L, -1)){
         fprintf(stderr, "Global yafetch is not a table");
         return;

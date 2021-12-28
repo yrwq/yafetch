@@ -1,6 +1,6 @@
 PROJECT = yafetch
-CFLAGS := $(shell pkg-config --cflags lua5.1)
-LDFLAGS := $(shell pkg-config --libs lua5.1)
+CFLAGS := $(shell pkg-config --cflags lua5.4)
+LDFLAGS := $(shell pkg-config --libs lua5.4)
 OBJECTS = src/script.o src/func.o src/main.o
 
 CONF ?= /usr/share/yafetch
