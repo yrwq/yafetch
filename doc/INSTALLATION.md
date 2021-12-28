@@ -2,7 +2,8 @@
 ```bash
 git clone https://github.com/TruncatedDinosour/yafetch && cd yafetch
 make
-make CONF="${HOME}/.config/yafetch" config # optional (copies default config to $HOME/.config/yafetch)
+make CONF="${HOME}/.config/yafetch" config  # optional (copies default config to $HOME/.config/yafetch)
+make strip  # optional, strips the binary
 sudo make install
 ```
 
