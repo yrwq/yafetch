@@ -140,7 +140,6 @@ LFUNC(pkgs) {
 /* yafetch.kernel() */
 /* Returns kernel version */
 LFUNC(kernel) {
-    static char ret[255];
     struct utsname sys;
     uname(&sys);
 

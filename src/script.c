@@ -23,7 +23,7 @@ char *config_location(void) {
 void script_run(char *filename) {
 
     /* Load config */
-    (luaL_loadfile(L, filename) || lua_pcall(L, 0, LUA_MULTRET, 0));
+    (void)(luaL_loadfile(L, filename) || lua_pcall(L, 0, LUA_MULTRET, 0));
 
     /* Look for a table called 'yafetch' */
     lua_getglobal(L, "yafetch");
