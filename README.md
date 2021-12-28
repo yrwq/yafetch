@@ -9,7 +9,7 @@
 - Lua 5.4
 
 
-# Documentation*(Installation, Upgrading, etc.)
+# Documentation (Installation, Upgrading, etc.)
 [Docs](/doc)
 
 
