@@ -58,5 +58,4 @@ dkms.conf
 !.clang-format
 
 # Cache
-.ccls-cache
-
+.ccls-cache/
