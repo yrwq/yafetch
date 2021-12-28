@@ -25,3 +25,7 @@ install: $(PROJECT)
 
 clean:
 	rm -f $(PROJECT) $(OBJECTS)
+
+uninstall:
+	rm -f $(DESTDIR)$(BINDIR)/yafetch
+
