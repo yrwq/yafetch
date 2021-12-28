@@ -13,6 +13,10 @@
 Check [INSTALLATION.md](/doc/INSTALLATION.md)
 
 
+# Upgrading
+Check [UPGRADING.md](/doc/UPGRADING.md)
+
+
 # Usage
 `yafetch` or `yafetch <config.lua>`
 
