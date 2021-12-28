@@ -10,7 +10,7 @@ BINDIR ?= $(PREFIX)/bin
 all: $(PROJECT)
 
 $(PROJECT): $(OBJECTS)
-	gcc $^ $(LDFLAGS) -o $@
+	$(CC) $^ $(LDFLAGS) -o $@
 
 config: $(PROJECT)
 	mkdir -p $(DESTDIR)$(CONF)
