@@ -10,7 +10,7 @@ BINDIR ?= $(PREFIX)/bin
 all: $(PROJECT)
 
 $(PROJECT): $(OBJECTS)
-	$(CC) $(CFLAGS) $(LUACFLAGS) $^ $(LDFLAGS) $(LUALDFLAGS) -o $@
+	$(CC) $(CFLAGS) $(LUACFLAGS) $^ $(LUALDFLAGS) -o $@
 
 config: $(PROJECT)
 	mkdir -p $(DESTDIR)$(CONF)
