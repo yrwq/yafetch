@@ -51,7 +51,7 @@ end
 
 
 if running_as_root() then
-    user_clr = red .. bld
+    user_clr = red .. bold
 end
 
 local ascii1 = wht .. "  ,d88b.d88b,    " .. user_clr
@@ -61,8 +61,8 @@ local ascii4 = yel .. "    `Y888Y´      " .. res
 local ascii5 = blu .. "      `Y´        " .. res
 
 
-yafetch.header_sep = "@"
-yafetch.header_sep_color = bold
+yafetch.header_sep = string.format("%s@%s", blu, res)
+yafetch.header_sep_color = wht
 yafetch.header_format = ascii1  -- could be ascii1, an icon, etc.
 
 
