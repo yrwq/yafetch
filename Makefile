@@ -1,7 +1,7 @@
 PROJECT = yafetch
 OBJECTS = src/script.o src/func.o src/main.o
-LUACFLAGS := $(shell pkg-config --cflags lua5.4)
-LUALDFLAGS := $(shell pkg-config --libs lua5.4)
+CFLAGS := $(shell pkg-config --cflags lua5.4)
+LDFLAGS := $(shell pkg-config --libs lua5.4)
 
 CONF ?= /usr/share/yafetch
 PREFIX ?= /usr/local
@@ -10,7 +10,7 @@ BINDIR ?= $(PREFIX)/bin
 all: $(PROJECT)
 
 $(PROJECT): $(OBJECTS)
-	$(CC) $(CFLAGS) $(LUACFLAGS) $^ $(LUALDFLAGS) -o $@
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
 
 config: $(PROJECT)
 	mkdir -p $(DESTDIR)$(CONF)
