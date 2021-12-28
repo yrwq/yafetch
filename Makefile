@@ -2,7 +2,6 @@ PROJECT = yafetch
 OBJECTS = src/script.o src/func.o src/main.o
 CFLAGS := $(CFLAGS) $(shell pkg-config --cflags lua5.4)
 LDFLAGS := $(LDFLAGS) $(shell pkg-config --libs lua5.4)
-STRIPFLAGS ?= --strip-all --remove-section=.note --remove-section=.gnu.version --remove-section=.comment --strip-debug --strip-unneeded
 
 CONF ?= /usr/share/yafetch
 PREFIX ?= /usr/local
