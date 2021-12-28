@@ -27,5 +27,5 @@ clean:
 	rm -f $(PROJECT) $(OBJECTS)
 
 uninstall:
-	rm -f $(DESTDIR)$(BINDIR)/yafetch
+	rm -i $(DESTDIR)$(BINDIR)/yafetch
 
