@@ -48,7 +48,7 @@ LFUNC(distro) {
     if (strncmp(new, "=", 1) == 0) {
         int len = strlen(new);
         for (int i = 0; i<len; i++){
-            if (new[i] == '\"' || new[i] == '=') {
+            if (new[i] == '\"' || new[i] == '\'' || new[i] == '=') {
                 for (int ii = 0; ii<len; ii++) new[ii] = new[ii+1];
                 new[strlen(new)-1] = '\0';
             }
