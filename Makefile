@@ -17,7 +17,7 @@ config: $(PROJECT)
 	cp init.lua $(DESTDIR)$(CONF)/init.lua
 
 strip: $(PROJECT)
-	strip $(PROJECT) $(STRIPFLAGS) -o $(PROJECT)
+	strip $(DESTDIR)$(PROJECT) $(STRIPFLAGS) -o $(DESTDIR)$(PROJECT)
 
 install: $(PROJECT)
 	mkdir -p $(DESTDIR)$(BINDIR)
