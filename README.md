@@ -4,17 +4,13 @@
 
 
 # Dependencies
-- a linux distribution
-- a compiler
-- `lua5.4`
+- a Linux distribution
+- a C compiler
+- Lua 5.4
 
 
-# Installation
-Check [INSTALLATION.md](/doc/INSTALLATION.md)
-
-
-# Upgrading
-Check [UPGRADING.md](/doc/UPGRADING.md)
+# Documentation*(Installation, Upgrading, etc.)
+[Docs](/doc)
 
 
 # Usage
@@ -23,4 +19,4 @@ Check [UPGRADING.md](/doc/UPGRADING.md)
 
 # Configuration
 Yafetch is extensible in lua, the default location for the config is `~/.config/yafetch/init.lua`
-See [docs](/doc/FUNC.md).
+See [Docs](/doc/FUNC.md).
