@@ -2,22 +2,21 @@
 
 <h4 align="center">Yafetch is a minimal command line system information tool written in C and configured in Lua. </h4>
 
+
 # Dependencies
+- a Linux distribution
+- a C compiler
+- Lua 5.4
 
-- a linux distribution
-- a compiler
-- `lua5.1`
 
-# Installation
+# Documentation (Installation, Upgrading, etc.)
+[Docs](/doc)
 
-check [INSTALLATION.md](INSTALLATION.md)
 
 # Usage
-
 `yafetch` or `yafetch <config.lua>`
 
+
 # Configuration
-
 Yafetch is extensible in lua, the default location for the config is `~/.config/yafetch/init.lua`
-
-See [docs](https://github.com/yrwq/yafetch/blob/main/docs.md).
+See [Docs](/doc/FUNC.md).

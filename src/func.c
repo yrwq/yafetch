@@ -10,19 +10,19 @@
 #include <sys/mount.h>
 #include <sys/param.h>
 
-#define LFUNC(N) int lua_##N(lua_State * L)
+#define LFUNC(N) int lua_##N(lua_State *L)
 
 /* yafetch.user() */
 /* Returns username */
-LFUNC(user){
+LFUNC(user) {
 
     uid_t uid = geteuid();
     struct passwd *pw = getpwuid(uid);
 
-    if(pw) {
+    if (pw) {
         lua_pushstring(L, pw->pw_name);
     } else {
-    lua_pushstring(L, "unknown");
+        lua_pushstring(L, "unknown");
     }
 
     return 1;
@@ -38,24 +38,27 @@ LFUNC(distro) {
     FILE *f = fopen("/etc/os-release", "rt");
 
     while (fgets(def, 512, f)) {
-        snprintf(new, 512, "%.*s", 511, def+4);
-        if (strncmp(new, "=", 1) == 0) break;
-        line++; }
+        snprintf(new, 512, "%.*s", 511, def + 4);
+        if (strncmp(new, "=", 1) == 0)
+            break;
+        line++;
+    }
 
     fclose(f);
     free(def);
 
     if (strncmp(new, "=", 1) == 0) {
         int len = strlen(new);
-        for (int i = 0; i<len; i++){
-            if (new[i] == '\"' || new[i] == '=') {
-                for (int ii = 0; ii<len; ii++) new[ii] = new[ii+1];
-                new[strlen(new)-1] = '\0';
+        for (int i = 0; i < len; i++) {
+            if (new[i] == '\"' || new[i] == '\'' || new[i] == '=') {
+                for (int ii = 0; ii < len; ii++)
+                    new[ii] = new[ii + 1];
+                new[strlen(new) - 1] = '\0';
             }
-         }
+        }
     }
 
-    if(new) {
+    if (new) {
         lua_pushstring(L, new);
     } else {
         lua_pushstring(L, "unknown");
@@ -65,8 +68,9 @@ LFUNC(distro) {
 
 /* yafetch.hostname() */
 /* Returns hostname of the machine */
-LFUNC(hostname){
-    /* Maximum characters of the hostname can be 255 on linux(+1 0 terminator) */
+LFUNC(hostname) {
+    /* Maximum characters of the hostname can be 255 on linux(+1 0 terminator)
+     */
     char hostname[255];
     gethostname(hostname, 255);
 
@@ -76,14 +80,17 @@ LFUNC(hostname){
 
 /* yafetch.pkgs() */
 /* Returns number of installed packages */
-LFUNC(pkgs){
+LFUNC(pkgs) {
     int apt, dnf, emerge, nix, pacman, rpm, xbps, bonsai, apk, total = 0;
 
     FILE *file[9];
-    file[0] = popen("dpkg-query -f '${binary:Package}\n' -W 2> /dev/null | wc -l", "r");
+    file[0] = popen(
+        "dpkg-query -f '${binary:Package}\n' -W 2> /dev/null | wc -l", "r");
     file[1] = popen("dnf list installed 2> /dev/null | wc -l", "r");
     file[2] = popen("qlist -I 2> /dev/null | wc -l", "r");
-    file[3] = popen("nix-store -q --requisites /run/current-system/sw 2> /dev/null | wc -l", "r");
+    file[3] = popen(
+        "nix-store -q --requisites /run/current-system/sw 2> /dev/null | wc -l",
+        "r");
     file[4] = popen("pacman -Qq 2> /dev/null | wc -l", "r");
     file[5] = popen("rpm -qa --last 2> /dev/null | wc -l", "r");
     file[6] = popen("xbps-query -l 2> /dev/null | wc -l", "r");
@@ -99,19 +106,29 @@ LFUNC(pkgs){
     fscanf(file[6], "%d", &xbps);
     fscanf(file[7], "%d", &bonsai);
     fscanf(file[8], "%d", &apk);
-    for (int i = 0; i < 9; i++) fclose(file[i]);
+    for (int i = 0; i < 9; i++)
+        fclose(file[i]);
 
-    if (apt > 0) total += apt;
-    if (dnf > 0) total += dnf;
-    if (emerge > 0) total += emerge;
-    if (nix > 0) total += nix;
-    if (pacman > 0) total += pacman;
-    if (rpm > 0) total += rpm;
-    if (xbps > 0) total += xbps;
-    if (bonsai > 0) total += bonsai;
-    if (apk > 0) total += apk;
+    if (apt > 0)
+        total += apt;
+    if (dnf > 0)
+        total += dnf;
+    if (emerge > 0)
+        total += emerge;
+    if (nix > 0)
+        total += nix;
+    if (pacman > 0)
+        total += pacman;
+    if (rpm > 0)
+        total += rpm;
+    if (xbps > 0)
+        total += xbps;
+    if (bonsai > 0)
+        total += bonsai;
+    if (apk > 0)
+        total += apk;
 
-    if(total) {
+    if (total) {
         lua_pushinteger(L, total);
     } else {
         lua_pushinteger(L, 0);
@@ -123,12 +140,11 @@ LFUNC(pkgs){
 /* yafetch.kernel() */
 /* Returns kernel version */
 LFUNC(kernel) {
-    static char ret[255];
     struct utsname sys;
     uname(&sys);
 
-    char * kernel = sys.release;
-    if(kernel) {
+    char *kernel = sys.release;
+    if (kernel) {
         lua_pushstring(L, kernel);
     } else {
         lua_pushstring(L, "unknown");
@@ -138,18 +154,18 @@ LFUNC(kernel) {
 
 /* yafetch.shell() */
 /* Returns path of shell */
-LFUNC(shell){
+LFUNC(shell) {
 
-    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+    lua_getglobal(L, "yafetch");
     lua_getfield(L, -1, "shell_base");
 
     const int shell_full = lua_toboolean(L, -1);
-    char * shell = getenv("SHELL");
+    char *shell = getenv("SHELL");
 
     /* Get basename of shell by looking for last '/' */
-    char * slash = strrchr(shell, '/');
+    char *slash = strrchr(shell, '/');
 
-    if(shell) {
+    if (shell) {
         if (shell_full == 1) {
             shell = slash + 1;
         }
@@ -162,45 +178,45 @@ LFUNC(shell){
 }
 
 /* yafetch.header() */
-LFUNC(header){
+LFUNC(header) {
 
-    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+    lua_getglobal(L, "yafetch");
 
     lua_getfield(L, -1, "header_sep");
-    const char * sep = lua_tostring(L, -1);
+    const char *sep = lua_tostring(L, -1);
 
-    if(lua_isnil(L, -1) == 1) {
+    if (lua_isnil(L, -1) == 1) {
         sep = "@";
     }
 
-    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+    lua_getglobal(L, "yafetch");
 
     lua_getfield(L, -1, "header_sep_color");
-    const char * sep_color = lua_tostring(L, -1);
+    const char *sep_color = lua_tostring(L, -1);
     lua_pop(L, 0);
 
-    if(lua_isnil(L, -1) == 1) {
+    if (lua_isnil(L, -1) == 1) {
         sep_color = "";
     }
 
-    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+    lua_getglobal(L, "yafetch");
 
     lua_getfield(L, -1, "header_format");
-    const char * fmt = lua_tostring(L, -1);
+    const char *fmt = lua_tostring(L, -1);
     lua_pop(L, 0);
 
-    if(lua_isnil(L, -1) == 1) {
+    if (lua_isnil(L, -1) == 1) {
         fmt = "";
-    } else if(lua_isnone(L, -1) == 1) {
+    } else if (lua_isnone(L, -1) == 1) {
         fmt = "";
     }
 
     /* Get arguments from lua function */
     /* Header color */
-    const char * h1_col;
+    const char *h1_col;
     h1_col = "\033[0m";
     /* Second header color */
-    const char * h2_col;
+    const char *h2_col;
     h2_col = "\033[0m";
 
     /* Get hostname */
@@ -211,17 +227,8 @@ LFUNC(header){
     uid_t uid = geteuid();
     struct passwd *pw = getpwuid(uid);
 
-    printf("%s%s%s%s%s%s%s%s%s%s\n",
-            h1_col,
-            fmt,
-            pw->pw_name,
-            reset,
-            sep_color,
-            sep,
-            reset,
-            h2_col,
-            hostname,
-            reset);
+    printf("%s%s%s%s%s%s%s%s%s%s\n", h1_col, fmt, pw->pw_name, reset, sep_color,
+           sep, reset, h2_col, hostname, reset);
 
     return 1;
 }
@@ -229,36 +236,38 @@ LFUNC(header){
 /* yafetch.format() */
 /* Formats given strings. */
 /* Helpers function to output information */
-LFUNC(format){
+LFUNC(format) {
 
-    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+    lua_getglobal(L, "yafetch");
 
     lua_getfield(L, -1, "sep");
-    const char * sep = lua_tostring(L, -1);
+    const char *sep = lua_tostring(L, -1);
 
-    lua_getfield(L, LUA_GLOBALSINDEX, "yafetch");
+    lua_getglobal(L, "yafetch");
 
     lua_getfield(L, -1, "sep_color");
-    const char * sep_color = lua_tostring(L, -1);
+    const char *sep_color = lua_tostring(L, -1);
     lua_pop(L, 0);
 
     /* Get arguments from lua function */
     /* Icon */
-    const char * col_icon = lua_tostring(L, 1);
-    const char * icon = lua_tostring(L, 2);
+    const char *col_icon = lua_tostring(L, 1);
+    const char *icon = lua_tostring(L, 2);
 
     /* Info */
-    const char * col_info = lua_tostring(L, 3);
-    const char * info = lua_tostring(L, 4);
+    const char *col_info = lua_tostring(L, 3);
+    const char *info = lua_tostring(L, 4);
 
-    printf("%7s%s%s%s%s%s%s%s%s\n",
-            col_icon, icon, reset, sep_color, sep, reset, col_info, info, reset);
+    printf("%7s%s%s%s%s%s%s%s%s\n", col_icon, icon, reset, sep_color, sep,
+           reset, col_info, info, reset);
     return 1;
 }
 
 /* Register functions in lua */
-void func_reg(void){
-#define REG(N) lua_pushcfunction(L, lua_##N); lua_setfield(L, -2, #N);
+void func_reg(void) {
+#define REG(N)                                                                 \
+    lua_pushcfunction(L, lua_##N);                                             \
+    lua_setfield(L, -2, #N);
     lua_newtable(L);
     REG(shell)
     REG(user)
@@ -268,7 +277,7 @@ void func_reg(void){
     REG(pkgs)
     REG(format)
     REG(header)
-    lua_setfield(L, LUA_GLOBALSINDEX, "yafetch");
+    lua_setglobal(L, "yafetch");
 
     luaL_newmetatable(L, "yafetch");
     lua_newtable(L);
