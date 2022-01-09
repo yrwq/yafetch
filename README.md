@@ -7,7 +7,6 @@
 - a Linux distribution
 - a C compiler
 - Lua 5.4
-- [wmctrl](https://www.freedesktop.org/wiki/Software/wmctrl/)
 
 
 # Documentation (Installation, Upgrading, etc.)
