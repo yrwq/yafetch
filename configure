@@ -1,0 +1,171 @@
+#!/usr/bin/env sh
+
+set -e
+
+usage() {
+    {
+        echo "$0 [FLAGS...]"
+        echo '    --help                Print help/usage'
+        echo '    --use-clang           Use clang instead of default ($CC or cc) compiler'
+        echo '    --use-gcc             Use gcc instead of default ($CC or cc) compiler'
+        echo '    --use-harden          Harden the binary'
+        echo '    --use-strip           Strip the generated binary'
+        echo '    --use-pedantic        Enable -Wpedantic -pedantic flags'
+        echo '    --use-warnings        Enable -Wall and -Wextra'
+        echo '    --use-werror          Enable -Werror'
+        echo '    --use-lto             Enable LTO'
+        echo '    --use-config          Install configuration to /usr/share/yafetch/init.lua or $CONF'
+        echo '    --use-extreme-strip   Configure strip flags to be extreme'
+        echo '    --use-install         Enable the `install` and `uninstall` makefile entries'
+        echo '    --use-optimise        Add optimisation flags'
+    } 1>&2
+}
+
+die() {
+    echo "$@" 1>&2
+    exit 1
+}
+
+check_cmd() {
+    echo "Checking for $1..."
+    command -v "$1" >/dev/null || die "$1 was not found"
+}
+
+check_pkg() {
+    echo "Checking for $1.pc..."
+    pkg-config --path "$1" >/dev/null || die "$1.pc was not found"
+}
+
+main() {
+    if [ ! "$1" ]; then
+        usage
+        exit 1
+    fi
+
+    check_cmd 'make'
+    check_cmd 'pkg-config'
+    check_pkg 'lua5.4'
+
+    project='yafetch'
+
+    compiler='$(CC)'
+    cflags=''
+    ldflags=''
+    stripflags=''
+    strip_enable=0
+    config_enable=0
+    install_enable=0
+
+    for arg in "$@"; do
+        case "$arg" in
+        --help)
+            usage
+            exit
+            ;;
+        --use-clang)
+            check_cmd 'clang'
+            compiler='clang'
+            ;;
+        --use-gcc)
+            check_cmd 'gcc'
+            compiler='gcc'
+            ;;
+        --use-harden)
+            cflags="$cflags -g -fstack-protector-strong -fstack-protector -fPIE -pie -D_FORTIFY_SOURCE=2 -O1 -Wno-unused-result -Wno-unused-command-line-argument"
+            ldflags="$ldflags -fpie,-Wl,-z,relro,now"
+            ;;
+        --use-strip)
+            strip_enable=1
+            ;;
+        --use-pedantic)
+            cflags="$cflags -Wpedantic -pedantic"
+            ;;
+        --use-warnings)
+            cflags="$cflags -Wall -Wextra -Wformat -Wformat-security"
+            ;;
+        --use-werror)
+            cflags="$cflags -Werror"
+            ;;
+        --use-lto)
+            cflags="$cflags -flto"
+            ldflags="$ldflags -flto"
+            ;;
+        --use-config)
+            config_enable=1
+            ;;
+        --use-extreme-strip)
+            stripflags='--strip-all -N __gentoo_check_ldflags__ -R .comment -R .GCC.command.line --remove-section=.eh_frame --remove-section=.eh_frame_hdr --remove-section=.gnu.hash --remove-section=.eh_frame_hdr --remove-section=.eh_frame_ptr --remove-section=.note.gnu.gold-version --remove-section=.note.gnu.build-id --remove-section=.note.ABI-tag --remove-section=.note --remove-section=.gnu.version --remove-section=.comment --strip-debug --strip-unneeded'
+            ;;
+        --use-install)
+            install_enable=1
+            ;;
+        --use-optimise)
+            cflags="$cflags -O2 -ffast-math"
+            ldflags="$ldflags -O2"
+            ;;
+        *)
+            die "Flag $arg not found"
+            ;;
+        esac
+    done
+
+    echo 'Configuring lua...'
+    cflags="$cflags $(pkg-config --cflags lua5.4 || die 'pkg-config cflags failed for lua5.4')"
+    ldflags="$cflags $(pkg-config --libs lua5.4 || die 'pkg-config ldflags failed for lua5.4')"
+
+    all=''
+
+    {
+        echo 'OBJECTS := src/script.o src/func.o src/main.o'
+        echo "CFLAGS := \$(CFLAGS) $cflags"
+        echo "LDFLAGS := \$(LDFLAGS) $ldflags"
+        echo "CC := $compiler"
+
+        echo 'all: $(OBJECTS)'
+        printf "\t%s\n" "\$(CC) \$(CFLAGS) \$^ \$(LDFLAGS) -o $project"
+        printf "\t%s\n" "make after"
+
+        echo 'clean:'
+        printf "\t%s\n" "rm -f $project \$(OBJECTS)"
+
+        if [ "$config_enable" = 1 ]; then
+            echo 'CONF ?= /usr/share/yafetch'
+            echo 'y_config:'
+            printf "\t%s\n" 'mkdir -p $(DESTDIR)$(CONF)'
+            printf "\t%s\n" 'cp init.lua $(DESTDIR)$(CONF)/init.lua'
+
+            all="$all y_config"
+        fi
+
+        if [ "$strip_enable" = 1 ]; then
+            echo "STRIPFLAGS := \$(STRIPFLAGS) $stripflags"
+            echo 'y_strip:'
+            printf "\t%s\n" "strip $project \$(STRIPFLAGS) -o $project"
+
+            all="$all y_strip"
+        fi
+
+        if [ "$strip_enable" = 1 ]; then
+            echo 'PREFIX ?= /usr/local'
+            echo 'BINDIR ?= $(PREFIX)/bin'
+
+            echo "install: $project"
+            printf "\t%s\n" 'mkdir -p $(DESTDIR)$(BINDIR)'
+            printf "\t%s\n" 'install -Dm755 yafetch $(DESTDIR)$(BINDIR)'
+
+            echo 'uninstall:'
+            printf "\t%s\n" 'rm -i $(DESTDIR)$(BINDIR)/yafetch'
+        fi
+
+        echo 'after:'
+        if [ "$all" ]; then
+            printf "\t%s\n" "make $all -j$(nproc --all)"
+        else
+            printf "\t%s\n" "-@echo 'No after-compile phase'"
+        fi
+
+        echo ".PHONY: $all"
+    } >Makefile
+}
+
+main "$@"

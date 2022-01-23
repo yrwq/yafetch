@@ -19,11 +19,10 @@ LFUNC(user) {
     uid_t uid = geteuid();
     struct passwd *pw = getpwuid(uid);
 
-    if (pw) {
+    if (pw)
         lua_pushstring(L, pw->pw_name);
-    } else {
+    else
         lua_pushstring(L, "unknown");
-    }
 
     return 1;
 }
@@ -49,6 +48,7 @@ LFUNC(distro) {
 
     if (strncmp(new, "=", 1) == 0) {
         int len = strlen(new);
+
         for (int i = 0; i < len; i++) {
             if (new[i] == '\"' || new[i] == '\'' || new[i] == '=') {
                 for (int ii = 0; ii < len; ii++)
@@ -58,11 +58,11 @@ LFUNC(distro) {
         }
     }
 
-    if (new) {
+    if (new)
         lua_pushstring(L, new);
-    } else {
+    else
         lua_pushstring(L, "unknown");
-    }
+
     return 1;
 }
 
@@ -128,11 +128,10 @@ LFUNC(pkgs) {
     if (apk > 0)
         total += apk;
 
-    if (total) {
+    if (total)
         lua_pushinteger(L, total);
-    } else {
+    else
         lua_pushinteger(L, 0);
-    }
 
     return 1;
 }
@@ -144,11 +143,11 @@ LFUNC(kernel) {
     uname(&sys);
 
     char *kernel = sys.release;
-    if (kernel) {
+    if (kernel)
         lua_pushstring(L, kernel);
-    } else {
+    else
         lua_pushstring(L, "unknown");
-    }
+
     return 1;
 }
 
@@ -166,13 +165,12 @@ LFUNC(shell) {
     char *slash = strrchr(shell, '/');
 
     if (shell) {
-        if (shell_full == 1) {
+        if (shell_full == 1)
             shell = slash + 1;
-        }
+
         lua_pushstring(L, shell);
-    } else {
+    } else
         lua_pushstring(L, "unknown");
-    }
 
     return 1;
 }
@@ -185,9 +183,8 @@ LFUNC(header) {
     lua_getfield(L, -1, "header_sep");
     const char *sep = lua_tostring(L, -1);
 
-    if (lua_isnil(L, -1) == 1) {
+    if (lua_isnil(L, -1) == 1)
         sep = "@";
-    }
 
     lua_getglobal(L, "yafetch");
 
@@ -195,9 +192,8 @@ LFUNC(header) {
     const char *sep_color = lua_tostring(L, -1);
     lua_pop(L, 0);
 
-    if (lua_isnil(L, -1) == 1) {
+    if (lua_isnil(L, -1) == 1)
         sep_color = "";
-    }
 
     lua_getglobal(L, "yafetch");
 
@@ -205,11 +201,10 @@ LFUNC(header) {
     const char *fmt = lua_tostring(L, -1);
     lua_pop(L, 0);
 
-    if (lua_isnil(L, -1) == 1) {
+    if (lua_isnil(L, -1) == 1)
         fmt = "";
-    } else if (lua_isnone(L, -1) == 1) {
+    else if (lua_isnone(L, -1) == 1)
         fmt = "";
-    }
 
     /* Get arguments from lua function */
     /* Header color */

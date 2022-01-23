@@ -1,7 +1,6 @@
 #include "yafetch.h"
 
 int main(int argc, char **argv) {
-
     /* Create a lua vm */
     script_init();
 
@@ -12,9 +11,9 @@ int main(int argc, char **argv) {
     if (argc != 2) {
         char *config_file = config_location();
 
-        if (access(config_file, F_OK) != -1) {
+        if (access(config_file, F_OK) != -1)
             script_run(config_file);
-        } else {
+        else {
             printf("\n%sYafetch%s: %s doesn't exist!\n\n", red, reset,
                    config_file);
         }

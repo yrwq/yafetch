@@ -21,7 +21,6 @@ char *config_location(void) {
 
 /* Run yafetch.init() from config */
 void script_run(char *filename) {
-
     /* Load config */
     (void)(luaL_loadfile(L, filename) || lua_pcall(L, 0, LUA_MULTRET, 0));
 
