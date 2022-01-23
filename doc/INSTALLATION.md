@@ -78,6 +78,6 @@ https://aur.archlinux.org/packages/yafetch-git/ (NOTE: This is **not the fork, i
 
 # Gentoo ebuild
 
-[app-misc/yafetch::dinolay](https://ari-web.netlify.app/gentooatom/app-misc/yafetch)
+[app-misc/yafetch::dinolay](https://ari-web.xyz/gentooatom/app-misc/yafetch)
 
 ## Suggestions, maintainers and more sources are welcome (PRs are open)

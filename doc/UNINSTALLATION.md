@@ -1,5 +1,6 @@
 # Manual
 ```bash
+./configure --use-install
 sudo make uninstall
 ```
 
