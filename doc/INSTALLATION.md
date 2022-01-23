@@ -50,6 +50,14 @@ make -j8
 sudo make install
 ```
 
+- Copy default configuration
+
+```bash
+mkdir -p ~/.config/yafetch
+
+cp /usr/share/yafetch/init.lua ~/.config/yafetch
+```
+
 Full install:
 
 ```bash
@@ -62,6 +70,10 @@ chmod a+rx ./configure
 make -j8
 
 sudo make install
+
+mkdir -p ~/.config/yafetch
+
+cp /usr/share/yafetch/init.lua ~/.config/yafetch
 ```
 
 **To recompile remember to `make clean` before the compilation step.**

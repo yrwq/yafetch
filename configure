@@ -164,7 +164,7 @@ main() {
             printf "\t%s\n" "-@echo 'No after-compile phase'"
         fi
 
-        echo ".PHONY: $all"
+        echo ".PHONY: all after $all"
     } >Makefile
 }
 
