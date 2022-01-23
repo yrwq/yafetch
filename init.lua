@@ -45,8 +45,8 @@ end
 
 
 function running_as_root()
-  local fd = io.open"/root"
-  if fd == nil then return false else io.close(fd) return true end
+    local fd = io.open"/root"
+    if fd == nil then return false else io.close(fd) return true end
 end
 
 
