@@ -25,7 +25,7 @@ For example
 
 Will
 
-```md
+```
 - Use the `clang` compiler
 - Harden the binary at compile time
 - Strip the binary
