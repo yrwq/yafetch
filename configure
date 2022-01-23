@@ -132,7 +132,7 @@ main() {
             echo 'CONF ?= /usr/share/yafetch'
             echo 'y_config:'
             printf "\t%s\n" 'mkdir -p $(DESTDIR)$(CONF)'
-            printf "\t%s\n" 'cp init.lua $(DESTDIR)$(CONF)/init.lua'
+            printf "\t%s\n" 'cp -f init.lua $(DESTDIR)$(CONF)/init.lua'
 
             all="$all y_config"
         fi
