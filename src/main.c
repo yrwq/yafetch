@@ -10,7 +10,13 @@ int main(int argc, char **argv) {
 
     /* Load configuration file */
     if (argc != 2) {
-        char *config_file = config_location();
+        char *user_conf = config_location();
+        char * config_file;
+        if(access(user_conf, F_OK) == 0) {
+            config_file = user_conf;
+        } else {
+            config_file = "/usr/share/yafetch/init.lua";
+        }
 
         if (access(config_file, F_OK) != -1) {
             script_run(config_file);

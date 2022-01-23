@@ -19,7 +19,7 @@ config: $(PROJECT)
 strip: $(PROJECT)
 	strip $(PROJECT) $(STRIPFLAGS) -o $(PROJECT)
 
-install: $(PROJECT)
+install: $(PROJECT) config
 	mkdir -p $(DESTDIR)$(BINDIR)
 	install -Dm755 yafetch $(DESTDIR)$(BINDIR)
 
