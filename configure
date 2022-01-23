@@ -131,7 +131,7 @@ main() {
         if [ "$config_enable" = 1 ]; then
             echo 'CONF ?= /usr/share/yafetch'
             echo 'y_config:'
-            printf "\t%s\n" 'rm -r $(DESTDIR)$(BINDIR)'
+            printf "\t%s\n" 'rm -rf $(DESTDIR)$(BINDIR)'
             printf "\t%s\n" 'mkdir -p $(DESTDIR)$(CONF)'
             printf "\t%s\n" 'install -Dm644 init.lua $(DESTDIR)$(CONF)'
 
