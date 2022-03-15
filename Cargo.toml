@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rlua = "1.0"
+rlua = "0.19.1"
