@@ -2,8 +2,13 @@
 
 pkgs.mkShell {
   buildInputs = with pkgs; [
-    gcc gnumake
+    rustup
+    rustc
+    cargo
+
     lua5_4
+    openssl
   ];
+
   nativeBuildInputs = [ pkgs.pkg-config ];
 }
