@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rlua = "0.19.1"
+mlua = { version = "0.7", features = ["lua54", "vendored"] }

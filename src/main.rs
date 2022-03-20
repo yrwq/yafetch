@@ -1,14 +1,18 @@
-use rlua::Lua;
+use mlua::{Function, Lua, Table};
+mod script;
 
-fn main()  {
+fn main() {
     let lua = Lua::new();
+    let globals = lua.globals();
 
-    lua.context(|ctx| {
-        let globals = ctx.globals();
+    let config = script::get_config();
+    let contents = std::fs::read_to_string(config).expect("failed to read init.lua");
 
-        globals.set("string_var", "hello").unwrap();
-        globals.set("int_var", 42).unwrap();
-        let i: i32 = globals.get("int_var").unwrap();
-        println!("{}", i)
-    });
+    lua.load(&contents).exec().unwrap();
+
+    let name: Table = globals.get("yafetch").unwrap();
+    let init: Function = name.get("init").unwrap();
+
+    init.call::<_, ()>("").unwrap();
 }
+
