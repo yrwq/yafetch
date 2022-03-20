@@ -1,5 +1,5 @@
 yafetch = {}
 
 yafetch.init = function()
-    print("goodbye world")
+    print("hello from args")
 end

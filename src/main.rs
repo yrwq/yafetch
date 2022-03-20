@@ -1,11 +1,10 @@
 use mlua::{Function, Lua, Table};
-mod script;
+mod helpers;
 
-fn main() {
+fn run(config: String) {
     let lua = Lua::new();
     let globals = lua.globals();
 
-    let config = script::get_config();
     let contents = std::fs::read_to_string(config).expect("failed to read init.lua");
 
     lua.load(&contents).exec().unwrap();
@@ -16,3 +15,15 @@ fn main() {
     init.call::<_, ()>("").unwrap();
 }
 
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+
+    let config: String;
+    if args.len() > 1 {
+        config = String::from(&args[1]);
+    } else {
+        config = helpers::get_config();
+    }
+
+    run(config);
+}
