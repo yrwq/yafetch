@@ -16,14 +16,16 @@ fn run(config: String) {
 }
 
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
 
-    let config: String;
-    if args.len() > 1 {
-        config = String::from(&args[1]);
-    } else {
-        config = helpers::get_config();
-    }
+    println!("{}", helpers::get_config());
+    // let args: Vec<String> = std::env::args().collect();
 
-    run(config);
+    // let config: String;
+    // if args.len() > 1 {
+    //     config = String::from(&args[1]);
+    // } else {
+    //     config = helpers::get_config();
+    // }
+
+    // run(config);
 }

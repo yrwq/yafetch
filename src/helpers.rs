@@ -1,10 +1,17 @@
+use directories::BaseDirs;
+use std::env::consts;
+
 pub fn get_config() -> String {
-    let mut home_cfg: String = std::env::var("HOME").unwrap();
-    home_cfg.push_str("/.config");
-
-    let mut config_location = std::env::var("XDG_CONFIG_HOME").unwrap_or(home_cfg);
-
-    config_location.push_str("/yafetch/init.lua");
-
-    return config_location;
+    if let Some(base_dirs) = BaseDirs::new() {
+        let b = base_dirs.config_dir();
+        let mut cfg_str = b.display().to_string();
+        match(consts::OS) {
+            "windows" => cfg_str.push_str("\\yafetch\\init.lua"),
+            _ => cfg_str.push_str("/yafetch/init.lua"),
+        }
+        return cfg_str;
+    } else {
+        // hopefully the program will not reach this point
+        return "".to_string();
+    }
 }
