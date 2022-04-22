@@ -1,0 +1,11 @@
+[package]
+name = "yafetch"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+directories = "4.0"
+sys-info = "0.9"
+systemstat = "0.1.10"
+mlua = { version = "0.7.4", features = ["lua54", "vendored"] }
+whoami = "1.2.1"

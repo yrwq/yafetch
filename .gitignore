@@ -64,3 +64,5 @@ dkms.conf
 # Added by cargo
 
 /target
+/cli/target
+/lib/target

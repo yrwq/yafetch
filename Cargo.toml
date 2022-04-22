@@ -1,8 +1,5 @@
-[package]
-name = "yafetch"
-version = "0.1.0"
-edition = "2021"
+[workspace]
 
-[dependencies]
-mlua = { version = "0.7", features = ["lua54", "vendored"] }
-directories = "4.0"
+members = [
+    "cli",
+]
