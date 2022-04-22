@@ -24,9 +24,21 @@ fn run(config: String) {
 
     let yafetch = lua.create_table().unwrap();
 
-    yafetch.set("hostname", get_hostname()).unwrap();
-    yafetch.set("username", get_username()).unwrap();
-    yafetch.set("distro", get_os()).unwrap();
+    let distro = lua.create_function(|_, ()| {
+        Ok(get_os())
+    }).unwrap();
+
+    let hostname = lua.create_function(|_, ()| {
+        Ok(get_hostname())
+    }).unwrap();
+
+    let username = lua.create_function(|_, ()| {
+        Ok(get_username())
+    }).unwrap();
+
+    yafetch.set("hostname", hostname).unwrap();
+    yafetch.set("username", username).unwrap();
+    yafetch.set("distro", distro).unwrap();
 
     globals.set("yafetch", yafetch).unwrap();
 
@@ -35,7 +47,6 @@ fn run(config: String) {
     lua.load(&contents).exec().unwrap();
 
     let init: Function = globals.get("init").unwrap();
-    // let init: Function = name.get("init").unwrap();
 
     init.call::<_, ()>("").unwrap();
 }

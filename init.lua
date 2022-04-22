@@ -1,6 +1,5 @@
 init = function()
-    print("hello from args")
-    print(yafetch["hostname"])
-    print(yafetch["username"])
-    print(yafetch["distro"])
+    print(yafetch.distro())
+    print(yafetch.hostname())
+    print(yafetch.username())
 end
