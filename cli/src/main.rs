@@ -1,8 +1,7 @@
-use mlua::{Function, Lua};
+use mlua::{Function, Lua, Variadic};
 use whoami;
 mod helpers;
 
-// Functions
 fn get_hostname() -> String {
     let hname = whoami::hostname();
     return hname;
@@ -24,6 +23,20 @@ fn run(config: String) {
 
     let yafetch = lua.create_table().unwrap();
 
+    let header = lua.create_function(|_, strings: Variadic<String>| {
+        Ok(print!("      {} @ {}\n", 
+        get_hostname(),
+        get_username(),
+    ))
+    }).unwrap();
+
+    let format = lua.create_function(|_, strings: Variadic<String>| {
+        Ok(print!("{}   :   {}", 
+        strings[0],
+        strings[1],
+    ))
+    }).unwrap();
+
     let distro = lua.create_function(|_, ()| {
         Ok(get_os())
     }).unwrap();
@@ -39,6 +52,8 @@ fn run(config: String) {
     yafetch.set("hostname", hostname).unwrap();
     yafetch.set("username", username).unwrap();
     yafetch.set("distro", distro).unwrap();
+    yafetch.set("format", format).unwrap();
+    yafetch.set("header", header).unwrap();
 
     globals.set("yafetch", yafetch).unwrap();
 
@@ -60,6 +75,7 @@ fn main() {
     } else {
         config = helpers::get_config();
     }
-
+    println!("");
     run(config);
+    println!("");
 }

@@ -1,5 +1,4 @@
 init = function()
-    print(yafetch.distro())
-    print(yafetch.hostname())
-    print(yafetch.username())
+    yafetch.header()
+    yafetch.format("distro", yafetch.distro())
 end
