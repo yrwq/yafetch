@@ -9,3 +9,4 @@ sys-info = "0.9"
 systemstat = "0.1.10"
 mlua = { version = "0.7.4", features = ["lua54", "vendored"] }
 whoami = "1.2.1"
+nix = "0.24.2"

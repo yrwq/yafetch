@@ -1,5 +1,6 @@
 use mlua::{Function, Lua, Variadic};
 use whoami;
+use std::process::Command;
 mod helpers;
 
 fn get_hostname() -> String {
@@ -17,6 +18,22 @@ fn get_os() -> String {
     return os;
 }
 
+
+fn get_music() -> String {
+    let data = Command::new("playerctl")
+        .arg("metadata")
+        .arg("--format")
+        .arg("{{ xesam:artist }} - {{ xesam:title }}") // leave the extra "a" there
+        .output().unwrap();
+     let music = String::from_utf8_lossy(&data.stdout)
+        .into_owned()
+        .split('\n')
+        .collect::<Vec<&str>>()[0]
+        .to_string();
+    return music;
+}
+
+
 fn run(config: String) {
     let lua = Lua::new();
     let globals = lua.globals();
@@ -24,14 +41,14 @@ fn run(config: String) {
     let yafetch = lua.create_table().unwrap();
 
     let header = lua.create_function(|_, strings: Variadic<String>| {
-        Ok(print!("      {} @ {}\n", 
+        Ok(print!("{:>14} @ {}\n", 
         get_hostname(),
         get_username(),
     ))
     }).unwrap();
 
     let format = lua.create_function(|_, strings: Variadic<String>| {
-        Ok(print!("{}   :   {}", 
+        Ok(print!("{:>12}   :   {}\n", 
         strings[0],
         strings[1],
     ))
@@ -49,9 +66,14 @@ fn run(config: String) {
         Ok(get_username())
     }).unwrap();
 
+    let music = lua.create_function(|_, ()| {
+        Ok(get_music())
+    }).unwrap();
+
     yafetch.set("hostname", hostname).unwrap();
     yafetch.set("username", username).unwrap();
     yafetch.set("distro", distro).unwrap();
+    yafetch.set("music", music).unwrap();
     yafetch.set("format", format).unwrap();
     yafetch.set("header", header).unwrap();
 
