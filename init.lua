@@ -33,8 +33,8 @@ local cpu_icon = " "
 local local_ip = yafetch.local_ip()
 local local_ip_icon = "󰲝 "
 
--- local local_ip = yafetch.public_ip()
--- local public_ip_icon = "󰛳 "
+local public_ip = yafetch.public_ip()
+local public_ip_icon = "󰛳 "
 
 if distro == "Arch Linux" then
     distro_icon = " "
@@ -69,6 +69,7 @@ function yafetch.init()
     yafetch.format(res .. grn, shell_icon, wht, shell)
     yafetch.format(res .. yel, kernel_icon, wht, kernel)
     yafetch.format(res .. yel, local_ip_icon, wht, local_ip)
+    yafetch.format(res .. yel, public_ip_icon, wht, public_ip)
     yafetch.format(res .. yel, cpu_icon, wht, cpu)
     yafetch.format(res .. blu, pkgs_icon, wht, pkgs)
 end
