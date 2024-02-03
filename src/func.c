@@ -1,16 +1,49 @@
 #include "yafetch.h"
 #include <lauxlib.h>
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <pwd.h>
-#include <stdlib.h>
 #include <unistd.h>
+
+#include <curl/curl.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+
 #include <sys/sysinfo.h>
 #include <sys/utsname.h>
 #include <sys/mount.h>
 #include <sys/param.h>
 
 #define LFUNC(N) int lua_##N(lua_State *L)
+
+
+/* yafetch.local_ip() */
+/* Returns local ip address */
+LFUNC(local_ip) {
+    char host[256];
+    char *IP;
+    struct hostent *host_entry;
+    int hostname;
+
+    //find the host name
+    hostname = gethostname(host, sizeof(host));
+
+    //find host information
+    host_entry = gethostbyname(host);
+
+    // convert ip to string
+    IP = inet_ntoa(*((struct in_addr*) host_entry->h_addr_list[0]));
+
+    lua_pushstring(L, IP);
+
+    return 1;
+}
 
 /* yafetch.user() */
 /* Returns username */
@@ -152,6 +185,8 @@ LFUNC(kernel) {
     return 1;
 }
 
+/* yafetch.cpu() */
+/* Returns cpu model name */
 LFUNC(cpu) {
     char *cpu_info;
     char *end;
@@ -310,6 +345,7 @@ void func_reg(void) {
     lua_setfield(L, -2, #N);
     lua_newtable(L);
     REG(shell)
+    REG(local_ip)
     REG(user)
     REG(hostname)
     REG(distro)
