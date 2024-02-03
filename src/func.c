@@ -152,6 +152,46 @@ LFUNC(kernel) {
     return 1;
 }
 
+LFUNC(cpu) {
+    char *cpu_info;
+    char *end;
+
+    FILE *fp = fopen("/proc/cpuinfo", "r");
+    if(!fp) return 1;
+
+    char *buf = malloc(0x10001);
+    buf[fread(buf, 1, 0x10000, fp)] = 0;
+    fclose(fp);
+
+    cpu_info = buf;
+
+    cpu_info = strstr(cpu_info, "model name");
+    if(!cpu_info) {
+        return 1;
+        free(cpu_info);
+    }
+
+    cpu_info += 13;
+
+    end = strstr(cpu_info, " @");
+    if(end)
+        *end = 0;
+    else {
+        end = strchr(cpu_info, '\n');
+        if(!end) {
+            return 1;
+            free(cpu_info);
+        }
+            
+        *end = 0;
+    }
+    ++end;
+
+    lua_pushstring(L, cpu_info);
+
+    return 1;
+}
+
 /* yafetch.shell() */
 /* Returns path of shell */
 LFUNC(shell) {
@@ -274,6 +314,7 @@ void func_reg(void) {
     REG(hostname)
     REG(distro)
     REG(kernel)
+    REG(cpu)
     REG(pkgs)
     REG(format)
     REG(header)

@@ -27,6 +27,9 @@ local pkgs_icon = " "
 local distro = yafetch.distro()
 local distro_icon
 
+local cpu = yafetch.cpu()
+local cpu_icon = " "
+
 if distro == "Arch Linux" then
     distro_icon = " "
 elseif distro == "NixOS" then
@@ -59,5 +62,6 @@ function yafetch.init()
     yafetch.format(res .. red, distro_icon, wht, distro)
     yafetch.format(res .. grn, shell_icon, wht, shell)
     yafetch.format(res .. yel, kernel_icon, wht, kernel)
+    yafetch.format(res .. yel, cpu_icon, wht, cpu)
     yafetch.format(res .. blu, pkgs_icon, wht, pkgs)
 end
