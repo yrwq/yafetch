@@ -8,6 +8,8 @@ local res = "\27[0m"
 
 local user_clr = res
 
+local pad = "  "
+
 yafetch.sep = " ~ "
 yafetch.sep_color = bold
 
@@ -61,15 +63,15 @@ end
 
 yafetch.header_sep = string.format("%s@%s", blu, res)
 yafetch.header_sep_color = wht
-yafetch.header_format = " " .. yafetch.sep -- could be ascii1, an icon, etc.
+yafetch.header_format = pad .. " " .. yafetch.sep -- could be ascii1, an icon, etc.
 
 function yafetch.init()
     yafetch.header()
-    yafetch.format(res .. red, distro_icon, wht, distro)
-    yafetch.format(res .. grn, shell_icon, wht, shell)
-    yafetch.format(res .. yel, kernel_icon, wht, kernel)
-    yafetch.format(res .. yel, local_ip_icon, wht, local_ip)
-    yafetch.format(res .. yel, public_ip_icon, wht, public_ip)
-    yafetch.format(res .. yel, cpu_icon, wht, cpu)
-    yafetch.format(res .. blu, pkgs_icon, wht, pkgs)
+    yafetch.format(pad .. res .. red, distro_icon, wht, distro)
+    yafetch.format(pad .. res .. grn, shell_icon, wht, shell)
+    yafetch.format(pad .. res .. yel, kernel_icon, wht, kernel)
+    yafetch.format(pad .. res .. yel, local_ip_icon, wht, local_ip)
+    yafetch.format(pad .. res .. yel, public_ip_icon, wht, public_ip)
+    yafetch.format(pad .. res .. yel, cpu_icon, wht, cpu)
+    yafetch.format(pad .. res .. blu, pkgs_icon, wht, pkgs)
 end
