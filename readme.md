@@ -1,17 +1,15 @@
-<p align="center"> <img src="http://0x0.st/-P91.png"> </p>
+<p align="center"> <img src="https://files.warpcorp.org/img/yafetch.png"> </p>
 
 <h4 align="center">Yafetch is a minimal command line system information tool written in C and configured in Lua. </h4>
 
-
 # Dependencies
-- a Linux distribution
+- currently only supports linux
 - a C compiler
 - Lua 5.4
-- [wmctrl](https://www.freedesktop.org/wiki/Software/wmctrl/)
-
 
 # Documentation (Installation, Upgrading, etc.)
-[Docs](/doc)
+
+[Docs](/docs)
 
 
 # Usage
@@ -20,4 +18,4 @@
 
 # Configuration
 Yafetch is extensible in lua, the default location for the config is `~/.config/yafetch/init.lua`
-See [Docs](/doc/FUNC.md).
+See [Docs](/docs/functions.md).
