@@ -28,4 +28,3 @@ clean:
 
 uninstall:
 	rm -i $(DESTDIR)$(BINDIR)/yafetch
-
