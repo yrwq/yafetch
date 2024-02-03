@@ -97,6 +97,8 @@ yafetch.format(red, "user", reset, yafetch.user())
 
 ##### yafetch.header()
 ##### yafetch.distro()
+##### yafetch.kernel()
+##### yafetch.cpu()
 ##### yafetch.pkgs()
 ##### yafetch.user()
 ##### yafetch.hostname()
