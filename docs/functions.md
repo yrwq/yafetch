@@ -92,13 +92,13 @@ yafetch.format(red, "user", reset, yafetch.user())
 ```
 > [yafetch.user()](https://github.com/yrwq/yafetch/blob/main/docs.md#yafetch.user())
 
-
 ### Functions that returns information
 
 ##### yafetch.header()
 ##### yafetch.distro()
 ##### yafetch.kernel()
 ##### yafetch.local_ip()
+##### yafetch.public_ip()
 ##### yafetch.cpu()
 ##### yafetch.pkgs()
 ##### yafetch.user()

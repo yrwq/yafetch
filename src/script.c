@@ -28,14 +28,14 @@ void script_run(char *filename) {
     /* Look for a table called 'yafetch' */
     lua_getglobal(L, "yafetch");
     if (!lua_istable(L, -1)) {
-        fprintf(stderr, "Global yafetch is not a table");
+        fprintf(stderr, "Global yafetch is not a table\n");
         return;
     }
 
     /* Look for a function called 'init' in table 'yafetch' */
     lua_getfield(L, -1, "init");
     if (!lua_isfunction(L, -1)) {
-        fprintf(stderr, "Global yafetch.init is not a function");
+        fprintf(stderr, "Global yafetch.init is not a function\n");
         return;
     }
 
