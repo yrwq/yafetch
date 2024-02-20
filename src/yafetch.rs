@@ -7,8 +7,9 @@ pub struct Yafetch {
 }
 
 impl Yafetch {
-    pub fn init(&self, path: String) {
-        let src: String = std::fs::read_to_string(path).unwrap().parse().unwrap();
+    /// run yafetch with the given configuration file
+    pub fn run(&self, path: std::path::PathBuf) {
+        let src: String = std::fs::read_to_string(path).unwrap();
         let chnk = self.lua.load(&src);
         match chnk.exec() {
             Ok(_) => {}
