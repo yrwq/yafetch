@@ -13,6 +13,7 @@ local used_ssd = yafetch.disk_total("/") - yafetch.disk_free("/")
 
 print(header)
 print(yel .. "distro    " .. res .. bold .. yafetch.os() .. res)
+print(yel .. "host      " .. res .. bold .. yafetch.host() .. res)
 print(yel .. "uptime    " .. res .. bold .. yafetch.uptime() .. res)
 print(yel .. "kernel    " .. res .. bold .. yafetch.kernel() .. res)
 print(yel .. "cpu       " .. res .. bold .. yafetch.cpu() .. res)

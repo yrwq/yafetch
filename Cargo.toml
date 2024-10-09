@@ -11,3 +11,4 @@ mlua = { version = "0.9.1", features = ["lua54", "vendored"] }
 sysinfo = "0.30.5"
 systemstat = "0.2.3"
 xdg = "2.5.2"
+whoami = "1.5.2"
