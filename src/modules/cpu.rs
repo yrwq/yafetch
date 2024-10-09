@@ -1,8 +1,12 @@
-use machine_info::Machine;
+use sysinfo::{CpuRefreshKind, RefreshKind, System};
 
-/// Returns the cpu brand
+/// Returns the cpu vendor and brand
 pub fn get() -> String {
-    let mut m = Machine::new();
-    let s = m.system_info();
-    return s.processor.brand
+    let s = System::new_with_specifics(RefreshKind::new().with_cpu(CpuRefreshKind::everything()));
+
+    let cpu = s.cpus().first();
+    let brand = cpu.unwrap().brand().to_string();
+    let vendor = cpu.unwrap().vendor_id().to_string();
+    let result = format!("{vendor} {brand}");
+    return result;
 }
