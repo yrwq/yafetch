@@ -1,6 +1,6 @@
-<span align="center">
-  <img src="assets/preview.png" width=640px height=480px />
-</span>
+<p align="center">
+  <img src="assets/preview_sample.png" width=640px height=480px />
+</p>
 
 <h4 align="center">Yafetch is a minimal command line system information tool written in Rust and configured in Lua. </h4>
 
