@@ -1,14 +1,20 @@
 pub mod modules;
 mod yafetch;
+use std::{io, path::{PathBuf, Path}};
 use mlua::Lua;
 
-/// try to get the user's config
-fn get_config() -> std::path::PathBuf {
-    let xdg_dirs = xdg::BaseDirectories::with_prefix("yafetch").unwrap();
-    let config_path = xdg_dirs
+fn get_config() -> Result<PathBuf, io::Error> {
+    let xdg_dirs = xdg::BaseDirectories::with_prefix("yafetch")
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+
+    xdg_dirs
         .find_config_file("init.lua")
-        .expect("could not find init.lua in ~/.config/yafetch");
-    return config_path;
+        .ok_or_else(|| {
+            io::Error::new(
+                io::ErrorKind::NotFound,
+                "init.lua not found",
+            )
+        })
 }
 
 fn main() {
@@ -23,13 +29,25 @@ fn main() {
     match args.len() {
         // no argument passed
         1 => {
-            yf.run(get_config());
+            match get_config() {
+                Ok(contents) => { yf.run(contents) },
+                Err(e) => eprintln!("failed to read config file: {}", e)
+            }
         }
+        // arg passed
         2 => {
-            yf.run(args[1].clone().into());
+            let path = Path::new(&args[1]);
+
+            if !path.exists() {
+                eprintln!("file does not exist: {}", path.display());
+                eprintln!("usage: yafetch [file.lua]");
+                return;
+            }
+
+            yf.run(path.into());
         }
         _ => {
-            // TODO: help message
+            eprintln!("usage: {} [file.lua]", args[0])
         }
     }
 }
